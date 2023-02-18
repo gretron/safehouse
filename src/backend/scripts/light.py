@@ -6,10 +6,10 @@ import RPi.GPIO as GPIO
 led=21
 
 # Setup
-GPIO.setWarnings(False)
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(led, GPIO.OUT)
 
 GPIO.output(led, GPIO.HIGH if sys.argv[1] == "on" else GPIO.LOW)
 
-print("Light: " + GPIO.input(led))
+print("Light: " + str(GPIO.input(led)))
