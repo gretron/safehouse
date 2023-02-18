@@ -4,6 +4,12 @@ const express = require("express");
 
 // Express App
 const app = express();
+const http = require("http");
+const server = http.createServer(app);
+
+// Socket Server
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 // Routes
 const lightRoutes = require("./routes/lightRoutes");
@@ -18,7 +24,11 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api/light", lightRoutes);
 
+io.on("connection", (socket) => {
+  console.log("User Connected.");
+});
+
 // Listen for Requests...
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log(`Listening on Port ${process.env.PORT}`);
 });
