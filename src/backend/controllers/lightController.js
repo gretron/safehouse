@@ -20,7 +20,7 @@ const setLightOn = async (req, res) => {
     console.log(`Python Process Closed with Code ${code}`);
 
     // Send Data to Browser
-    res.status(200).send(sendData);
+    res.status(200).json(sendData);
   });
 };
 
@@ -44,7 +44,7 @@ const setLightOff = async (req, res) => {
     console.log(`Python Process Closed with Code ${code}`);
 
     // Send Data to Browser
-    res.status(200).send(sendData);
+    res.status(200).json(sendData);
   });
 };
 
