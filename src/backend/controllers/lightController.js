@@ -7,11 +7,17 @@ const setLightOn = async (req, res) => {
   let sendData;
 
   // Execute Python Script
-  const python = spawn("python", ["../scripts/light.py", "on"]);
+  const python = spawn("python", [__dirname + "/../scripts/light.py", "on"]);
 
   // Collect Data from Python Process
   python.stdout.on("data", (data) => {
     console.log("Data Received from Python Script...");
+    sendData = data.toString();
+  });
+
+  // Collect Data from Python Process
+  python.stderr.on("data", (data) => {
+    console.log("Error Received from Python Script...");
     sendData = data.toString();
   });
 
@@ -31,7 +37,7 @@ const setLightOff = async (req, res) => {
   let sendData;
 
   // Execute Python Script
-  const python = spawn("python", ["../scripts/light.py", "off"]);
+  const python = spawn("python", [__dirname + "/../scripts/light.py", "off"]);
 
   // Collect Data from Python Process
   python.stdout.on("data", (data) => {
