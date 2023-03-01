@@ -5,7 +5,7 @@ import { useState } from "react";
  */
 export const useLightState = () => {
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getLightState = async () => {
     setLoading(true);
@@ -18,6 +18,7 @@ export const useLightState = () => {
     if (!response.ok) {
       setError("Not Found");
     } else {
+      setLoading(false);
       return json;
     }
 
@@ -37,6 +38,7 @@ export const useLightState = () => {
     if (!response.ok) {
       setError("Not Found");
     } else {
+      setLoading(false);
       return json;
     }
 

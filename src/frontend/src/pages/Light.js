@@ -50,8 +50,4 @@ const Light = () => {
   );
 };
 
-export const Nate = () => {
-  return <div>Look Here. Good Morning</div>;
-};
-
 export default Light;

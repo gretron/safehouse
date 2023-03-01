@@ -3,7 +3,7 @@ import { ReactComponent as Light } from "../assets/img/light.svg";
 
 
 // Hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLightState } from "../hooks/useLightState";
 
 /**
@@ -11,7 +11,19 @@ import { useLightState } from "../hooks/useLightState";
  */
 const LightWidget = () => {
   const [state, setState] = useState(false);
-  const { setLightState, loading, error } = useLightState();
+  const { getLightState, setLightState, loading, error } = useLightState();
+
+  useEffect(() => {
+    const fetchState = async () => {
+      const newState = await getLightState();
+
+      console.log(newState);
+
+      setState(newState != 0);
+    }
+
+    fetchState();
+  }, [])
 
   const handleClick = async () => {
     const newState = await setLightState(!state);
@@ -28,7 +40,7 @@ const LightWidget = () => {
         style={{ aspectRatio: "1 / 1", width: "10rem" }}
         onClick={() => handleClick()}
       >
-        <Light />
+        {!loading && <Light />}
         <div>{error}</div>
       </button>
     </div>
