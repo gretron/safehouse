@@ -5,9 +5,13 @@ const { spawn } = require("child_process");
  */
 const setLightOn = async (req, res) => {
   let sendData;
+  let error;
 
   // Execute Python Script
-  const python = spawn("python", [__dirname + "/../scripts/lightSwitch.py", "on"]);
+  const python = spawn("python", [
+    __dirname + "/../scripts/lightSwitch.py",
+    "on",
+  ]);
 
   // Collect Data from Python Process
   python.stdout.on("data", (data) => {
@@ -18,12 +22,18 @@ const setLightOn = async (req, res) => {
   // Collect Data from Python Process
   python.stderr.on("data", (data) => {
     console.log("Error Received from Python Script...");
-    sendData = data.toString();
+    error = data.toString();
+
+    console.log(data);
   });
 
   // On Python Process Close
   python.on("close", (code) => {
     console.log(`Python Process Closed with Code ${code}`);
+
+    if (error) {
+      res.status(404).json(error);
+    }
 
     // Send Data to Browser
     res.status(200).json(sendData);
@@ -37,7 +47,10 @@ const setLightOff = async (req, res) => {
   let sendData;
 
   // Execute Python Script
-  const python = spawn("python", [__dirname + "/../scripts/lightSwitch.py", "off"]);
+  const python = spawn("python", [
+    __dirname + "/../scripts/lightSwitch.py",
+    "off",
+  ]);
 
   // Collect Data from Python Process
   python.stdout.on("data", (data) => {

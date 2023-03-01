@@ -1,0 +1,24 @@
+.dashboard {
+  --padding: 2rem;
+
+  color: var(--white);
+  background: red;
+
+  flex-basis: calc(20% - var(--padding) * 2);
+
+  padding: var(--padding);
+  border-radius: 2rem;
+}
+
+.light-widget img {
+  width: 75%;
+  aspect-ratio: 1 / 1;
+}
+
+.light-widget button {
+  border-radius: 2rem;
+
+  border: 1px solid var(--white);
+
+  background: none;
+}

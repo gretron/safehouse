@@ -1,0 +1,73 @@
+:root {
+  --white: #fcfcfc;
+  --violet: #3326ae;
+  --black: #37324a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: "Primeform Pro";
+  font-weight: normal;
+
+  src: url("../fonts/PrimeformPro-Medium.otf");
+}
+
+@font-face {
+  font-family: "Primeform Pro";
+  font-weight: bold;
+
+  src: url("../fonts/PrimeformPro-Bold.otf");
+}
+
+html {
+  font-family: "Primeform Pro";
+
+  background: var(--white);
+}
+
+.App {
+  --gap: 1rem;
+
+  width: calc(100% - var(--gap) * 2);
+  min-height: calc(100vh - var(--gap) * 2);
+
+  display: flex;
+  gap: var(--gap);
+
+  margin: var(--gap);
+}
+
+.navbar {
+  --padding: 2rem;
+
+  color: var(--white);
+  background: var(--violet);
+
+  flex-basis: calc(20% - var(--padding) * 2);
+
+  padding: var(--padding);
+  border-radius: 2rem;
+}
+
+.page {
+  flex-grow: 1;
+}
+
+.sidebar {
+  --padding: 2rem;
+
+  background: green;
+
+  flex-basis: calc(30% - var(--padding) * 2);
+
+  padding: var(--padding);
+  border-radius: 2rem;
+}
+
+button {
+  font-family: "Primeform Pro";
+}
