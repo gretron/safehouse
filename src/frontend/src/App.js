@@ -1,6 +1,8 @@
 // #region Imports
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+// Pages
 import Light from "./pages/Light";
 
 // #endregion
