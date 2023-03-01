@@ -10,9 +10,9 @@
   border-radius: 2rem;
 }
 
-.light-widget img {
+.light-widget svg {
   width: 75%;
-  aspect-ratio: 1 / 1;
+  height: 75%;  
 }
 
 .light-widget button {
@@ -20,5 +20,11 @@
 
   border: 1px solid var(--white);
 
+  outline: none;
+
   background: none;
+}
+
+.light-widget--active svg {
+  fill: yellow;
 }

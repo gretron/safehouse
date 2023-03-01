@@ -1,4 +1,6 @@
 import light from "../assets/img/light.svg";
+import { ReactComponent as Light } from "../assets/img/light.svg";
+
 
 // Hooks
 import { useState } from "react";
@@ -16,16 +18,17 @@ const LightWidget = () => {
 
     console.log(newState);
 
-    setState(newState);
+    setState(newState != 0);
   };
 
   return (
     <div className="light-widget">
       <button
+        className={state ? "light-widget--active" : ""}
         style={{ aspectRatio: "1 / 1", width: "10rem" }}
         onClick={() => handleClick()}
       >
-        <img src={light} />
+        <Light />
         <div>{error}</div>
       </button>
     </div>

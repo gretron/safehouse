@@ -1,7 +1,7 @@
 // #region Imports
 
 // Hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLightState } from "../hooks/useLightState";
 
 // Styles
@@ -14,12 +14,24 @@ import styles from "../assets/css/light.css";
  */
 const Light = () => {
   const [state, setState] = useState(false);
-  const { setLightState, loading, error } = useLightState();
+  const { getLightState, setLightState, loading, error } = useLightState();
+
+  useEffect(() => {
+    const fetchState = async () => {
+      const newState = await getLightState();
+
+      console.log(newState);
+
+      setState(newState != 0);
+    }
+
+    fetchState();
+  }, [])
 
   const handleChange = async (checked) => {
-    console.log(await setLightState(checked));
+    const newState = await setLightState(checked);
 
-    setState(checked);
+    setState(newState != 0);
   };
 
   return (

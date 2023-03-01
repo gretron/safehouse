@@ -2,10 +2,12 @@
 const express = require("express");
 
 // Controller Functions
-const { setLightOn, setLightOff } = require("../controllers/lightController");
+const { getLightState, setLightOn, setLightOff } = require("../controllers/lightController");
 
 // Router
 const router = express.Router();
+
+router.get("/state", getLightState);
 
 // Turn On Light
 router.get("/on", setLightOn);
