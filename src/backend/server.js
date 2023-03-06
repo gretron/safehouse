@@ -1,3 +1,5 @@
+// #region Imports
+
 // Modules
 require("dotenv").config();
 const express = require("express");
@@ -14,9 +16,12 @@ const io = new Server(server);
 // Routes
 const lightRoutes = require("./routes/lightRoutes");
 
+// #endregion
+
 // Middleware
 app.use(express.json());
 app.use((req, res, next) => {
+  // Print Request Path and Method
   console.log(req.path, req.method);
   next();
 });
@@ -24,11 +29,12 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api/light", lightRoutes);
 
+// Socket Server Events
 io.on("connection", (socket) => {
-  console.log("User Connected.");
+  console.log("User has Connected...");
 });
 
-// Listen for Requests...
+// Listen for Requests
 server.listen(process.env.PORT, () => {
-  console.log(`Listening on Port ${process.env.PORT}`);
+  console.log(`Listening on Port ${process.env.PORT}...`);
 });
