@@ -3,12 +3,13 @@
 // Modules
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
+const sqlite3 = require("sqlite3").verbose();
 
 // Express App
 const app = express();
 
 // Routes
+const userRoutes = require("./routes/userRoutes");
 const lightRoutes = require("./routes/lightRoutes");
 
 // #endregion
@@ -22,18 +23,27 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use("/api/user", userRoutes);
 app.use("/api/light", lightRoutes);
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    // Listen for Requests...
-    app.listen(process.env.PORT, () => {
-      console.log(
-        `Database Connection Established & Listening on Port ${process.env.PORT}`
-      );
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// Listen for Requests
+global.db = new sqlite3.Database(
+  "./db/safehouse.db",
+  sqlite3.OPEN_READWRITE,
+  (err) => {
+    if (!err) {
+      app.listen(process.env.PORT, () => {
+        console.log(`Listening on Port ${process.env.PORT}...`);
+      });
+    } else {
+      console.error(err.message);
+    }
+  }
+);
+
+// Create User Table
+const createTableQuery =
+  "CREATE TABLE IF NOT EXISTS user (user_id INTEGER PRIMARY KEY, user_email TEXT, user_password TEXT)";
+global.db.run(createTableQuery, [], function (err) {
+  if (err) console.error(err.message);
+});
