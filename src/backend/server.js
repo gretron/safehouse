@@ -3,15 +3,10 @@
 // Modules
 require("dotenv").config();
 const express = require("express");
+const mongoose = require("mongoose");
 
 // Express App
 const app = express();
-const http = require("http");
-const server = http.createServer(app);
-
-// Socket Server
-const { Server } = require("socket.io");
-const io = new Server(server);
 
 // Routes
 const lightRoutes = require("./routes/lightRoutes");
@@ -29,12 +24,16 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api/light", lightRoutes);
 
-// Socket Server Events
-io.on("connection", (socket) => {
-  console.log("User has Connected...");
-});
-
-// Listen for Requests
-server.listen(process.env.PORT, () => {
-  console.log(`Listening on Port ${process.env.PORT}...`);
-});
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    // Listen for Requests...
+    app.listen(process.env.PORT, () => {
+      console.log(
+        `Database Connection Established & Listening on Port ${process.env.PORT}`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
