@@ -154,7 +154,7 @@ User.register = async function (email, password) {
   let user;
 
   try {
-    const user = await selectUser({ user_id: lastId });
+    user = await selectUser({ user_id: lastId });
   } catch (err) {
     console.error(err);
     throw Error(err);

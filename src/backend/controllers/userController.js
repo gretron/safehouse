@@ -40,7 +40,7 @@ const loginUser = async (req, res) => {
 
   try {
     const user = await User.login(email, password);
-    const token = createToken(user._id);
+    const token = createToken(user.user_id);
 
     res.status(200).json({ email, token });
   } catch (err) {
@@ -69,6 +69,7 @@ const verifyToken = async (req, res) => {
     const { user_id } = jwt.verify(token, process.env.SECRET);
 
     const user = await User.exists(user_id);
+    console.log(jwt.verify(token, process.env.SECRET))
 
     if (user) {
       res.status(200).json({ Ok: true, Error: "" });

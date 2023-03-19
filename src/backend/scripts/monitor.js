@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const mqtt = require("mqtt");
 const raspi = require("raspi");
-// const gpio = require("raspi-gpio");
+const gpio = require("raspi-gpio");
 
 /**
  * Start MQTT Client Monitor
