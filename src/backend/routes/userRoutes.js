@@ -6,6 +6,7 @@ const {
   loginUser,
   registerUser,
   verifyToken,
+  verifyAcl
 } = require("../controllers/userController");
 
 // Router
@@ -19,6 +20,9 @@ router.post("/register", registerUser);
 
 // POST JWT Verification
 router.post("/jwt", verifyToken);
+
+// POST ACL Verification
+router.post("/acl", verifyAcl);
 
 // Exports
 module.exports = router;

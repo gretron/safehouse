@@ -53,10 +53,23 @@ const loginUser = async (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-const verifyToken = async (req, res) => {};
+const verifyToken = async (req, res) => {
+  res.status(200).json({Ok: true, Error: ""});
+};
+
+/**
+ * Verify Token Validity and User Existence
+ * @param {Request} req
+ * @param {Response} res
+ */
+const verifyAcl = async (req, res) => {
+  console.log("hi")
+  res.status(200).json({Ok: true, Error: ""});
+};
 
 module.exports = {
   loginUser,
   registerUser,
   verifyToken,
+  verifyAcl
 };

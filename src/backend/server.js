@@ -3,6 +3,7 @@
 // Modules
 require("dotenv").config();
 const express = require("express");
+const bodyParser = require("body-parser");
 const sqlite3 = require("sqlite3").verbose();
 
 // Express App
@@ -15,7 +16,14 @@ const lightRoutes = require("./routes/lightRoutes");
 // #endregion
 
 // Middleware
-app.use(express.json());
+app.use(bodyParser.json());
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError) {
+    // console.error(err);
+  }
+
+  next();
+});
 app.use((req, res, next) => {
   // Print Request Path and Method
   console.log(req.path, req.method);
