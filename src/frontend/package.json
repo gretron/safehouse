@@ -1,5 +1,5 @@
 {
-  "proxy": "http://10.0.0.63:4000",
+  "proxy": "localhost:4000",
   "name": "safehouse-frontend",
   "version": "0.1.0",
   "private": true,
