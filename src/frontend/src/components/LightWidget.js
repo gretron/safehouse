@@ -1,7 +1,6 @@
 import light from "../assets/img/light.svg";
 import { ReactComponent as Light } from "../assets/img/light.svg";
 
-
 // Hooks
 import { useEffect, useState } from "react";
 import { useLightState } from "../hooks/useLightState";
@@ -20,10 +19,10 @@ const LightWidget = () => {
       console.log(newState);
 
       setState(newState != 0);
-    }
+    };
 
     fetchState();
-  }, [])
+  }, []);
 
   const handleClick = async () => {
     const newState = await setLightState(!state);

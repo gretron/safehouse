@@ -1,8 +1,13 @@
+// Hooks
+import { useAuthContext } from "../hooks/useAuthContext";
+
 /**
  * Information Sidebar
  */
 const Sidebar = () => {
-  return <div className="sidebar">Welcome User</div>;
+  const { user } = useAuthContext();
+
+  return <>{user && <div className="sidebar">Welcome User</div>}</>;
 };
 
 export default Sidebar;

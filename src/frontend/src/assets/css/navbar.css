@@ -1,60 +1,83 @@
-/*
-.button {
-  width: 100%;
-  padding: 1rem;
+.navbar {
+  --padding: min(3rem, 3vw);
 
-  border-radius: 2rem;
-  border: none;
-}
-*/
-.button {
+  background-color: var(--secondary);
+
   position: relative;
-  display: block;
-  overflow: hidden;
-  width: 100%;
-  height: 4rem;
 
-  color: var(--white);
-  transition: color 0.2s ease-out;
+  /*
+  display: flex;
+  flex-direction: column;
+  */
 
-  border-radius: 2rem;
+  flex-basis: min(20vw, 20rem);
+
+  padding: var(--padding);
+}
+
+.navbar__brand {
+  margin: 0 min(4vw, 4rem);
+}
+
+.navbar__user-name {
+  margin-top: 2rem;
+
+  font-size: 1.5rem;
+}
+
+.navbar__user-email {
+  color: var(--neutral-dark);
+
+  font-size: 0.9rem;
+  font-weight: 200;
+}
+
+.navbar__links {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  margin-top: 3rem;
+}
+
+.navbar__link {
+  color: var(--neutral);
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 
   text-decoration: none;
 }
-.button span {
+
+.navbar__link:hover .navbar__link-icon-indicator {
+  fill: var(--accent);
+}
+
+.navbar__link--active .navbar__link-icon-indicator {
+  fill: var(--accent);
+}
+
+.navbar__link-label {
+  font-weight: 300;
+}
+
+.navbar__link-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.navbar__link-icon-path {
+  fill: var(--neutral);
+}
+
+.navbar__link-icon-indicator {
+  fill: var(--neutral-dark);
+
+  transition: 0.2s;
+}
+
+.navbar__footer {
   position: absolute;
-  display: block;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background-color: var(--white);
-  transition: width 0.4s ease-out, height 0.4s ease-out;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-}
-.label {
-  position: relative;
-  z-index: 2;
-  transform: translateY(-2%);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  height: 100%;
-}
-
-.button:hover {
-  color: var(--black);
-}
-
-.button:hover span {
-  width: 500px;
-  height: 500px;
-}
-
-.button--active {
-  color: var(--black);
-  background-color: var(--white) !important;
+  bottom: var(--padding);
 }

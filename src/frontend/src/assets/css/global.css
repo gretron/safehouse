@@ -1,73 +1,141 @@
 :root {
-  --white: #fcfcfc;
-  --violet: #3326ae;
-  --black: #37324a;
+  /* Colors */
+  --primary: #111111;
+
+  --secondary-lightest: #373737;
+  --secondary-lighter: #242424;
+  --secondary-light: #181818;
+  --secondary: #151515;
+
+  --neutral: #ffffff;
+  --neutral-dark: #646464;
+
+  --accent: #727cc6;
+  --accent-dark: #6974c9;
+  --accent-darker: #606ccc;
 }
 
 * {
   margin: 0;
   padding: 0;
+
+  box-sizing: border-box;
 }
 
 @font-face {
-  font-family: "Primeform Pro";
+  font-family: "Formular";
+  font-weight: 200;
+
+  src: url("../fonts/Formular-Light.woff");
+}
+
+@font-face {
+  font-family: "Formular";
+  font-weight: 300;
+
+  src: url("../fonts/Formular.woff");
+}
+
+@font-face {
+  font-family: "Formular";
   font-weight: normal;
 
-  src: url("../fonts/PrimeformPro-Medium.otf");
+  src: url("../fonts/Formular-Medium.woff");
 }
 
 @font-face {
-  font-family: "Primeform Pro";
+  font-family: "Formular";
   font-weight: bold;
 
-  src: url("../fonts/PrimeformPro-Bold.otf");
+  src: url("../fonts/Formular-Bold.woff");
 }
 
-html {
-  font-family: "Primeform Pro";
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
 
-  background: var(--white);
+  margin: 0;
+  padding: 0;
+
+  font-family: "Formular";
+}
+
+.heading--1 {
+  font-size: 3rem;
 }
 
 .App {
-  --gap: 1rem;
-
-  width: calc(100% - var(--gap) * 2);
-  min-height: calc(100vh - var(--gap) * 2);
+  color: var(--neutral);
+  background-color: var(--primary);
 
   display: flex;
-  gap: var(--gap);
 
-  margin: var(--gap);
-}
-
-.navbar {
-  --padding: 2rem;
-
-  color: var(--white);
-  background: var(--violet);
-
-  flex-basis: calc(20% - var(--padding) * 2);
-
-  padding: var(--padding);
-  border-radius: 2rem;
+  height: 100vh;
 }
 
 .page {
+  --padding: min(3rem, 3vw);
+
   flex-grow: 1;
+
+  padding: var(--padding);
+
+  overflow-y: scroll;
 }
 
 .sidebar {
-  --padding: 2rem;
+  --padding: min(3rem, 3vw);
 
-  background: green;
+  background-color: var(--secondary);
 
-  flex-basis: calc(30% - var(--padding) * 2);
+  flex-basis: min(28vw, 28rem);
 
   padding: var(--padding);
-  border-radius: 2rem;
 }
 
-button {
-  font-family: "Primeform Pro";
+.field {
+}
+
+.field__label {
+  margin-bottom: 1rem;
+}
+
+.field input {
+  color: var(--neutral);
+
+  font-family: "Formular";
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"] {
+  background: none;
+  outline: none;
+
+  padding: 1rem;
+  border: 2px solid var(--neutral-dark);
+  border-radius: 8px;
+
+  font-size: 1rem;
+
+  transition: 0.2s ease;
+}
+
+.field input[type="text"]:focus {
+  border-color: var(--neutral);
+}
+
+.button--purple {
+  color: var(--neutral);
+  background: var(--accent);
+
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+
+  cursor: pointer;
+
+  font-family: "Formular";
+  font-size: 1rem;
 }

@@ -1,0 +1,36 @@
+.login,
+.register {
+  width: min(90%, 32rem);
+
+  margin: auto;
+  margin-top: 20vh;
+  padding: 2rem;
+
+  vertical-align: middle;
+
+  background: var(--secondary);
+
+  border-radius: 16px;
+}
+
+.login .heading--1,
+.register .heading--1 {
+  margin-bottom: 2rem;
+}
+
+.login .field,
+.register .field {
+  margin-bottom: 1rem;
+}
+
+.login .field input,
+.register .field input {
+  width: 100%;
+}
+
+.login button,
+.register button {
+  margin-top: 1rem;
+
+  width: 100%;
+}
