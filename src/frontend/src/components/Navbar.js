@@ -11,6 +11,7 @@ import { ReactComponent as LogoutIcon } from "../assets/img/logout.svg";
 // Hooks
 import { useLocation, Link } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout } from "../hooks/useLogout";
 
 // Styles
 import styles from "../assets/css/navbar.css";
@@ -23,6 +24,11 @@ import styles from "../assets/css/navbar.css";
 const Navbar = () => {
   const location = useLocation();
   const { user } = useAuthContext();
+  const { logout } = useLogout();
+
+  const handleClick = () => {
+    logout();
+  }
 
   return (
     <div className="navbar">
@@ -52,10 +58,10 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="navbar__footer">
-            <Link to="/" className="navbar__link">
+            <a className="navbar__link" onClick={handleClick}>
               <LogoutIcon />
               <div className="navbar__link-label">Logout</div>
-            </Link>
+            </a>
           </div>
         </>
       ) : (
