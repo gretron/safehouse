@@ -54,7 +54,32 @@ const loginUser = async (req, res) => {
  * @param {Response} res
  */
 const verifyToken = async (req, res) => {
-  res.status(200).json({Ok: true, Error: ""});
+  console.log(req.headers);
+  // Verify Authentication
+  const { authorization } = req.headers;
+
+  if (!authorization) {
+    return res.status(401).json({ msg: "Authorization Token Required" });
+  }
+
+  // Get Token from Authorization Header
+  const token = authorization.split(" ")[1];
+
+  try {
+    const { user_id } = jwt.verify(token, process.env.SECRET);
+
+    const user = await User.exists(user_id);
+
+    if (user) {
+      res.status(200).json({ Ok: true, Error: "" });
+    } else {
+      res.status(401).json({ Ok: false, Error: "Request Is Not Authorized" });
+    }
+  } catch (err) {
+    console.error(err);
+
+    res.status(401).json({ Ok: false, Error: "Request Is Not Authorized" });
+  }
 };
 
 /**
@@ -63,13 +88,12 @@ const verifyToken = async (req, res) => {
  * @param {Response} res
  */
 const verifyAcl = async (req, res) => {
-  console.log("hi")
-  res.status(200).json({Ok: true, Error: ""});
+  res.status(200).json({ Ok: true, Error: "" });
 };
 
 module.exports = {
   loginUser,
   registerUser,
   verifyToken,
-  verifyAcl
+  verifyAcl,
 };

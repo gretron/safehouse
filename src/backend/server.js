@@ -13,6 +13,9 @@ const app = express();
 const userRoutes = require("./routes/userRoutes");
 const lightRoutes = require("./routes/lightRoutes");
 
+// Monitor
+const monitor = require("./scripts/monitor");
+
 // #endregion
 
 // Middleware
@@ -42,16 +45,30 @@ global.db = new sqlite3.Database(
     if (!err) {
       app.listen(process.env.PORT, () => {
         console.log(`Listening on Port ${process.env.PORT}...`);
+
+        // Create User Table
+        const createTableQuery =
+          "CREATE TABLE IF NOT EXISTS user (user_id INTEGER PRIMARY KEY, user_email TEXT, user_password TEXT)";
+        global.db.run(createTableQuery, [], function (err) {
+          if (err) console.error(err.message);
+
+          // Create Default Admin User
+          const createAdminQuery =
+            "INSERT OR IGNORE INTO User (user_id, user_email, user_password) VALUES (?, ?, ?)";
+          global.db.run(
+            createAdminQuery,
+            [1, "admin", "password"],
+            function (err) {
+              if (err) console.error(err.message);
+            }
+          );
+        });
       });
+
+      // Start Monitor
+      monitor();
     } else {
       console.error(err.message);
     }
   }
 );
-
-// Create User Table
-const createTableQuery =
-  "CREATE TABLE IF NOT EXISTS user (user_id INTEGER PRIMARY KEY, user_email TEXT, user_password TEXT)";
-global.db.run(createTableQuery, [], function (err) {
-  if (err) console.error(err.message);
-});

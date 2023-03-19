@@ -69,15 +69,24 @@ function createUser(email, hash_password) {
 /**
  * Select User
  * @param {array} filters Filters to Find User
+ * @param {array} columns Columns to Select
  * @returns Filtered User
  */
-function selectUser(filters) {
+function selectUser(filters, columns = "*") {
   return new Promise((resolve, reject) => {
     // Get Database
     const db = global.db;
 
+    let select;
+
+    if (columns === "*") {
+      select = columns;
+    } else {
+      select = columns.join(" ");
+    }
+
     // Get User at Id
-    var selectUserQuery = "SELECT * FROM User WHERE 1 ";
+    var selectUserQuery = `SELECT ${select} FROM User WHERE 1 `;
 
     Object.keys(filters).forEach((key) => {
       selectUserQuery = selectUserQuery.concat(`AND ${key} = ? `);
@@ -186,6 +195,10 @@ User.login = async function (email, password) {
   }
 
   return user;
+};
+
+User.exists = async function (user_id) {
+  return await selectUser({ user_id: user_id });
 };
 
 // Exports
