@@ -36,7 +36,8 @@ const monitor = function () {
             } else if (state === 0) {
               output.write(gpio.LOW);
             } else {
-              console.error("Invalid Light State");
+              const input = new gpio.DigitalInput(process.env.LIGHT_PIN);
+              client.publish("safehouse/light", input.read().toString())
             }
 
             break;
