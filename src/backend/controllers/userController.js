@@ -69,7 +69,7 @@ const verifyToken = async (req, res) => {
     const { user_id } = jwt.verify(token, process.env.SECRET);
 
     const user = await User.exists(user_id);
-    console.log(jwt.verify(token, process.env.SECRET))
+    console.log(jwt.verify(token, process.env.SECRET));
 
     if (user) {
       res.status(200).json({ Ok: true, Error: "" });

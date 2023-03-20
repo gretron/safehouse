@@ -1,11 +1,15 @@
+// Hooks
 import { createContext, useReducer, useEffect } from "react";
+import { useMqtt } from "../hooks/useMqtt";
 
 export const MqttContext = createContext();
 
 export const mqttReducer = (state, action) => {
   switch (action.type) {
     case "CONNECT":
-      return { client: action.payload };
+      return { client: action.payload, message: state.message };
+    case "LIGHT":
+      return { ...state, light: action.payload };
     case "DISCONNECT":
       return { client: null };
     default:
@@ -14,21 +18,14 @@ export const mqttReducer = (state, action) => {
 };
 
 export const MqttContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(mqttReducer, { client: null });
-
-  useEffect(() => {
-    // TODO Connect to Mqtt
-
-    if (user) {
-      dispatch({ type: "CONNECT", payload: client });
-    }
-  }, []);
-
-  console.log("AuthContext State: ", state);
+  const [state, dispatch] = useReducer(mqttReducer, {
+    client: null,
+    light: null,
+  });
 
   return (
-    <AuthContext.Provider value={{ ...state, dispatch }}>
+    <MqttContext.Provider value={{ ...state, dispatch }}>
       {children}
-    </AuthContext.Provider>
+    </MqttContext.Provider>
   );
 };

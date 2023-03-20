@@ -1,5 +1,5 @@
 {
-  "proxy": "http://localhost:4000",
+  "proxy": "http://10.0.0.63:4000",
   "name": "safehouse-frontend",
   "version": "0.1.0",
   "private": true,
@@ -7,6 +7,8 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "paho-mqtt": "^1.1.0",
+    "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-gauge-chart": "^0.4.1",
