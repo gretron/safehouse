@@ -29,6 +29,7 @@ export const useMqtt = () => {
       onSuccess: () => {
         console.log("Connected to MQTT broker");
         mqttClient.subscribe("safehouse/light");
+        mqttClient.publish("safehouse/light", "get");
 
         dispatch({ type: "CONNECT", payload: mqttClient });
       },

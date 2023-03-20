@@ -9,7 +9,15 @@ export const mqttReducer = (state, action) => {
     case "CONNECT":
       return { client: action.payload, message: state.message };
     case "LIGHT":
-      return { ...state, light: action.payload };
+      let value;
+
+      if (action.payload == "1" || action.payload == "0") {
+        value = action.payload;
+      } else {
+        value = state.light;
+      }
+
+      return { ...state, light: value };
     case "DISCONNECT":
       return { client: null };
     default:
