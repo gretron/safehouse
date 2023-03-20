@@ -37,7 +37,7 @@ const monitor = function () {
               output.write(gpio.LOW);
             } else {
               const input = new gpio.DigitalInput(process.env.LIGHT_PIN);
-              client.publish("safehouse/light", input.read().toString())
+              client.publish("safehouse/light", input.read().toString());
             }
 
             break;
