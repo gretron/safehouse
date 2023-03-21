@@ -29,15 +29,11 @@ const monitor = function () {
         switch (topic) {
           case "safehouse/light":
             const output = new gpio.DigitalOutput(process.env.LIGHT_PIN);
-            const state = parseInt(message);
 
-            if (state === 1) {
+            if (message.includes("1")) {
               output.write(gpio.HIGH);
-            } else if (state === 0) {
+            } else if (message.includes("0")) {
               output.write(gpio.LOW);
-            } else {
-              const input = new gpio.DigitalInput(process.env.LIGHT_PIN);
-              client.publish("safehouse/light", input.read().toString());
             }
 
             break;
