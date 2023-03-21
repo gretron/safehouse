@@ -53,7 +53,7 @@ const monitor = function () {
           client.publish("safehouse/humidity", humidity.toString());
         }
       });
-    }, 1000);
+    }, 3000);
   });
 };
 
