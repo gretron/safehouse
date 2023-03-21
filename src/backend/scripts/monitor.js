@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const mqtt = require("mqtt");
 const raspi = require("raspi");
 const gpio = require("raspi-gpio");
+const sensor = require("node-dht-sensor");
 
 /**
  * Start MQTT Client Monitor
@@ -24,6 +25,7 @@ const monitor = function () {
       console.log("Connected to MQTT Broker");
 
       client.subscribe("safehouse/light");
+      client.subscribe("safehouse/switch");
 
       client.on("message", (topic, message) => {
         switch (topic) {
@@ -44,7 +46,13 @@ const monitor = function () {
     });
 
     setInterval(() => {
-      // console.log("Test");
+      sensor.read(11, 20, function(err, temperature, humidity) {
+        if (!err) {
+          console.log(`temp: ${temperature}°C, humidity: ${humidity}%`);
+          client.publish("safehouse/temperature", temperature.toString());
+          client.publish("safehouse/humidity", humidity.toString());
+        }
+      });
     }, 1000);
   });
 };
