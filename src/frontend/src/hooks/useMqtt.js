@@ -28,6 +28,8 @@ export const useMqtt = () => {
         console.log("Connected to MQTT broker");
 
         mqttClient.subscribe("safehouse/light");
+        mqttClient.subscribe("safehouse/temperature");
+        mqttClient.subscribe("safehouse/humidity");
 
         dispatch({ type: "CONNECT", payload: mqttClient });
       },
@@ -37,6 +39,7 @@ export const useMqtt = () => {
       useSSL: false,
       userName: user.token,
       password: "any",
+      reconnect: true,
     });
 
     mqttClient.onMessageArrived = (message) => {
@@ -45,6 +48,12 @@ export const useMqtt = () => {
       switch (message.destinationName) {
         case "safehouse/light":
           dispatch({ type: "LIGHT", payload: message.payloadString });
+          break;
+        case "safehouse/humidity":
+          dispatch({ type: "HUMIDITY", payload: message.payloadString });
+          break;
+        case "safehouse/temperature":
+          dispatch({ type: "TEMPERATURE", payload: message.payloadString });
           break;
         default:
       }

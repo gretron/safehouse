@@ -17,6 +17,10 @@ export const mqttReducer = (state, action) => {
       }
 
       return { ...state, light: value };
+    case "HUMIDITY":
+      return { ...state, humidity: action.payload };
+    case "TEMPERATURE":
+      return { ...state, temperature: action.payload };
     case "DISCONNECT":
       return { client: null };
     default:

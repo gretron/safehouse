@@ -2,7 +2,7 @@
   --padding: 2rem;
 
   color: var(--white);
-  background: red;
+  background: var(--accent);
 
   flex-basis: calc(20% - var(--padding) * 2);
 
@@ -12,7 +12,7 @@
 
 .light-widget svg {
   width: 75%;
-  height: 75%;  
+  height: 75%;
 }
 
 .light-widget button {

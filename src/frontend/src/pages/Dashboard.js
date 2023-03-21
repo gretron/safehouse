@@ -2,13 +2,14 @@
 import dashboard from "../assets/css/dashboard.css";
 
 // Components
-import LightWidget from "../components/LightWidget";
 import GaugeChart from "react-gauge-chart";
-import { useSubscription } from "../hooks/useSubscription";
 import { useMqttContext } from "../hooks/useMqttContext";
 import { useState, useRef } from "react";
 import { useMqtt } from "../hooks/useMqtt";
 import { useAuthContext } from "../hooks/useAuthContext";
+
+import light from "../assets/img/light.svg";
+import { ReactComponent as Light } from "../assets/img/light.svg";
 
 /**
  * Dashboard Page
@@ -16,6 +17,8 @@ import { useAuthContext } from "../hooks/useAuthContext";
 const Dashboard = () => {
   const { user } = useAuthContext();
   const { connect } = useMqtt();
+  const { humidity, temperature } = useMqttContext();
+
   const loaded = useRef(false);
 
   useState(() => {
@@ -30,29 +33,48 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <LightIndicator />
-      <GaugeChart id="gauge--1" />
+      <LightWidget />
+      <GaugeChart
+        id="gauge--1"
+        animate={false}
+        percent={Number(humidity) / 100}
+        nrOfLevels={1}
+        colors={["#3477eb"]}
+      />
+      <GaugeChart
+        id="gauge--2"
+        animate={false}
+        percent={Number(temperature) / 100}
+        formatTextValue={(value) => value + "°C"}
+        nrOfLevels={16}
+      />
     </div>
   );
 };
 
-const LightIndicator = () => {
+/**
+ * Widget for Light Electrical Component
+ */
+const LightWidget = () => {
   const { client, light } = useMqttContext();
 
+  const handleClick = async () => {
+    client.publish(
+      "safehouse/light",
+      light ? (light == "1" ? "0" : "1") : "1",
+      0,
+      true
+    );
+  };
+
   return (
-    <div>
-      {light}
+    <div className="light-widget">
       <button
-        onClick={(e) => {
-          client.publish(
-            "safehouse/light",
-            light ? (light == "1" ? "0" : "1") : "1",
-            0,
-            true
-          );
-        }}
+        className={light == "1" ? "light-widget--active" : ""}
+        style={{ aspectRatio: "1 / 1", width: "10rem" }}
+        onClick={() => handleClick()}
       >
-        turn on off
+        <Light />
       </button>
     </div>
   );
