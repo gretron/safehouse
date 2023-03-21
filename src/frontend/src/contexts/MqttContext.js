@@ -1,6 +1,5 @@
 // Hooks
 import { createContext, useReducer, useEffect } from "react";
-import { useMqtt } from "../hooks/useMqtt";
 
 export const MqttContext = createContext();
 

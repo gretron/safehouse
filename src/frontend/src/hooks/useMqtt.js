@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { useMqttContext } from "./useMqttContext";
-import { Client } from "paho-mqtt";
+import { Client, Message } from "paho-mqtt";
 
 export const useMqtt = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { client, dispatch } = useMqttContext();
+  const { dispatch } = useMqttContext();
 
   const connect = async (user) => {
-    if (client) return;
-
     const options = {
       hostname: process.env.REACT_APP_MQTT_HOST,
       port: process.env.REACT_APP_MQTT_PORT,
@@ -28,8 +26,8 @@ export const useMqtt = () => {
     mqttClient.connect({
       onSuccess: () => {
         console.log("Connected to MQTT broker");
+
         mqttClient.subscribe("safehouse/light");
-        mqttClient.publish("safehouse/light", "get");
 
         dispatch({ type: "CONNECT", payload: mqttClient });
       },
