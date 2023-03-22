@@ -10,6 +10,9 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 import { ReactComponent as Light } from "../assets/img/light.svg";
 
+import { ReactComponent as LightOn } from "../assets/img/light-on.svg";
+import { ReactComponent as LightOff } from "../assets/img/light-off.svg";
+
 import { ReactComponent as FanOn } from "../assets/img/fan-on.svg";
 import { ReactComponent as FanOff } from "../assets/img/fan-off.svg";
 
@@ -77,7 +80,7 @@ const LightWidget = () => {
         style={{ aspectRatio: "1 / 1", width: "10rem" }}
         onClick={() => handleClick()}
       >
-        <Light />
+        {light == 1 ? <LightOn /> : <LightOff />}
       </button>
     </div>
   );
