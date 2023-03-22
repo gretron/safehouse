@@ -77,7 +77,7 @@ const monitor = function () {
               canSendMail = true;
             }, 30000);
           } else {
-            console.log("canSendMail: " + canSendMail.toString());
+        console.log("canSendMail: " + canSendMail.toString());
           }
         }
       });
