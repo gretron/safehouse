@@ -3,6 +3,7 @@ const mqtt = require("mqtt");
 const raspi = require("raspi");
 const gpio = require("raspi-gpio");
 const sensor = require("node-dht-sensor");
+const { inbox, sendMail } = require("./email");
 
 /**
  * Start MQTT Client Monitor
@@ -25,7 +26,7 @@ const monitor = function () {
       console.log("Connected to MQTT Broker");
 
       client.subscribe("safehouse/light");
-      client.subscribe("safehouse/switch");
+      client.subscribe("safehouse/fan");
 
       client.on("message", (topic, message) => {
         switch (topic) {
@@ -39,11 +40,25 @@ const monitor = function () {
             }
 
             break;
+          case "safehouse/fan":
+            const enable = new gpio.DigitalOutput(process.env.MOTOR_ENABLE_PIN);
+            const inOne = new gpio.DigitalOutput(process.env.MOTOR_IN_ONE_PIN);
+            const inTwo = new gpio.DigitalOutput(process.env.MOTOR_IN_TWO_PIN);
+
+            if (message.includes("1")) {
+              enable.write(gpio.HIGH);
+              inOne.write(gpio.HIGH);
+              // inTwo.write(gpio.HIGH);
+            } else if (message.includes("0")) {
+              enable.write(gpio.LOW);
+            }
           default:
             break;
         }
       });
     });
+
+    let canSendMail = true;
 
     setInterval(() => {
       sensor.read(11, 20, function(err, temperature, humidity) {
@@ -51,9 +66,28 @@ const monitor = function () {
           console.log(`temp: ${temperature}°C, humidity: ${humidity}%`);
           client.publish("safehouse/temperature", temperature.toString());
           client.publish("safehouse/humidity", humidity.toString());
+
+          if (temperature > 20 && canSendMail) {
+            console.log("canSendMail: " + canSendMail.toString());
+            canSendMail = false;
+
+            sendMail("davidanotrudeau@gmail.com", "Safehouse Alert: Temperature", `The current temperature is ${temperature}°C. Would you like to turn on the fan?`);
+
+            setTimeout(() => {
+              canSendMail = true;
+            }, 30000);
+          } else {
+            console.log("canSendMail: " + canSendMail.toString());
+          }
         }
       });
     }, 3000);
+
+    inbox((text) => {
+      if (text.includes("yes")) {
+        client.publish("safehouse/fan", "1");
+      }
+    });
   });
 };
 
