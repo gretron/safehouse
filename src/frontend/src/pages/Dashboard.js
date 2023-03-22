@@ -8,8 +8,10 @@ import { useState, useRef } from "react";
 import { useMqtt } from "../hooks/useMqtt";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-import light from "../assets/img/light.svg";
 import { ReactComponent as Light } from "../assets/img/light.svg";
+
+import { ReactComponent as FanOn } from "../assets/img/fan-on.svg";
+import { ReactComponent as FanOff } from "../assets/img/fan-off.svg";
 
 /**
  * Dashboard Page
@@ -34,6 +36,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <LightWidget />
+      <FanWidget />
       <GaugeChart
         id="gauge--1"
         animate={false}
@@ -75,6 +78,31 @@ const LightWidget = () => {
         onClick={() => handleClick()}
       >
         <Light />
+      </button>
+    </div>
+  );
+};
+
+const FanWidget = () => {
+  const { client, fan } = useMqttContext();
+
+  const handleClick = async () => {
+    client.publish(
+      "safehouse/fan",
+      fan ? (fan == "1" ? "0" : "1") : "1",
+      0,
+      true
+    );
+  };
+
+  return (
+    <div className="light-widget">
+      <button
+        className={fan == "1" ? "light-widget--active" : ""}
+        style={{ aspectRatio: "1 / 1", width: "10rem" }}
+        onClick={() => handleClick()}
+      >
+        {fan == 1 ? <FanOn /> : <FanOff />}
       </button>
     </div>
   );

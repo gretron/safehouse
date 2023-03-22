@@ -21,6 +21,8 @@ export const mqttReducer = (state, action) => {
       return { ...state, humidity: action.payload };
     case "TEMPERATURE":
       return { ...state, temperature: action.payload };
+    case "FAN":
+      return { ...state, fan: action.payload };
     case "DISCONNECT":
       return { client: null };
     default:
@@ -31,7 +33,10 @@ export const mqttReducer = (state, action) => {
 export const MqttContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(mqttReducer, {
     client: null,
-    light: null,
+    light: 0,
+    humidity: 0,
+    temperature: 0,
+    fan: 0,
   });
 
   return (

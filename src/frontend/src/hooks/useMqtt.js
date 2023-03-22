@@ -30,6 +30,7 @@ export const useMqtt = () => {
         mqttClient.subscribe("safehouse/light");
         mqttClient.subscribe("safehouse/temperature");
         mqttClient.subscribe("safehouse/humidity");
+        mqttClient.subscribe("safehouse/fan");
 
         dispatch({ type: "CONNECT", payload: mqttClient });
       },
@@ -54,6 +55,9 @@ export const useMqtt = () => {
           break;
         case "safehouse/temperature":
           dispatch({ type: "TEMPERATURE", payload: message.payloadString });
+          break;
+        case "safehouse/fan":
+          dispatch({ type: "FAN", payload: message.payloadString });
           break;
         default:
       }
