@@ -28,6 +28,9 @@ const monitor = function () {
       client.subscribe("safehouse/light");
       client.subscribe("safehouse/fan");
 
+      client.publish("safehouse/ligt", "0", { retain: true });
+      client.publish("safehouse/fan", "0", { retain: true });
+
       client.on("message", (topic, message) => {
         switch (topic) {
           case "safehouse/light":
@@ -67,7 +70,7 @@ const monitor = function () {
           client.publish("safehouse/temperature", temperature.toString());
           client.publish("safehouse/humidity", humidity.toString());
 
-          if (temperature > 20 && canSendMail) {
+          if (temperature > 25 && canSendMail) {
             console.log("canSendMail: " + canSendMail.toString());
             canSendMail = false;
 
@@ -84,8 +87,8 @@ const monitor = function () {
     }, 3000);
 
     inbox((text) => {
-      if (text.includes("yes")) {
-        client.publish("safehouse/fan", "1");
+      if (text.toLowerCase().includes("yes")) {
+        client.publish("safehouse/fan", "1", { retain: true });
       }
     });
   });

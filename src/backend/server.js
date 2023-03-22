@@ -29,7 +29,7 @@ app.use((err, req, res, next) => {
 });
 app.use((req, res, next) => {
   // Print Request Path and Method
-  console.log(req.path, req.method);
+  // console.log(req.path, req.method);
   next();
 });
 
