@@ -3,10 +3,14 @@ import dashboard from "../assets/css/dashboard.css";
 
 // Components
 import GaugeChart from "react-gauge-chart";
-import { useMqttContext } from "../hooks/useMqttContext";
-import { useState, useRef } from "react";
-import { useMqtt } from "../hooks/useMqtt";
+import { useState, useRef, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
+import {
+  useMqttClient,
+  useMqttConnect,
+  useMqttSubscribe,
+  useMqttUnsubscribe,
+} from "../contexts/MqttContext";
 
 import { ReactComponent as Light } from "../assets/img/light.svg";
 
@@ -20,9 +24,7 @@ import { ReactComponent as FanOff } from "../assets/img/fan-off.svg";
  * Dashboard Page
  */
 const Dashboard = () => {
-  const { user } = useAuthContext();
-  const { connect } = useMqtt();
-  const { humidity, temperature } = useMqttContext();
+  const connect = useMqttConnect();
 
   const loaded = useRef(false);
 
@@ -33,34 +35,90 @@ const Dashboard = () => {
 
     console.log("renders");
 
-    connect(user);
+    // connect(user);
+    connect();
   }, []);
 
   return (
     <div className="dashboard">
-      <LightWidget />
-      <FanWidget />
-      <GaugeChart
-        id="gauge--1"
-        animate={false}
-        percent={Number(humidity) / 100}
-        nrOfLevels={1}
-        colors={["#3477eb"]}
-      />
-      <GaugeChart
-        id="gauge--2"
-        animate={false}
-        percent={Number(temperature) / 100}
-        formatTextValue={(value) => value + "°C"}
-        nrOfLevels={16}
-      />
+      {/*<LightWidget />
+      <FanWidget />*/}
+      <HumidityGauge />
+      <TemperatureGauge />
     </div>
+  );
+};
+
+const TemperatureGauge = () => {
+  const [temperature, setTemperature] = useState(0);
+  const mqttClient = useMqttClient();
+  const subscribe = useMqttSubscribe();
+  const unsubscribe = useMqttUnsubscribe();
+
+  const onTemperatureReceived = (string) => {
+    setTemperature(parseFloat(string));
+    console.log("Temperature: ", string);
+  };
+
+  useEffect(() => {
+    if (mqttClient) {
+      subscribe("safehouse/temperature", onTemperatureReceived);
+    }
+
+    return () => {
+      if (mqttClient) {
+        unsubscribe("safehouse/temperature", onTemperatureReceived);
+      }
+    };
+  }, [mqttClient]);
+
+  return (
+    <GaugeChart
+      id="gauge--2"
+      percent={temperature / 100}
+      formatTextValue={(value) => value + "°C"}
+      nrOfLevels={16}
+    />
+  );
+};
+
+const HumidityGauge = () => {
+  const [humidity, setHumidity] = useState(0);
+  const mqttClient = useMqttClient();
+  const subscribe = useMqttSubscribe();
+  const unsubscribe = useMqttUnsubscribe();
+
+  const onHumidityReceived = (string) => {
+    setHumidity(parseFloat(string));
+    console.log("Humidity: ", string);
+  };
+
+  useEffect(() => {
+    if (mqttClient) {
+      subscribe("safehouse/humidity", onHumidityReceived);
+    }
+
+    return () => {
+      if (mqttClient) {
+        unsubscribe("safehouse/humidity", onHumidityReceived);
+      }
+    };
+  }, [mqttClient]);
+
+  return (
+    <GaugeChart
+      id="gauge--1"
+      percent={humidity / 100}
+      nrOfLevels={1}
+      colors={["#3477eb"]}
+    />
   );
 };
 
 /**
  * Widget for Light Electrical Component
  */
+/*
 const LightWidget = () => {
   const { client, light } = useMqttContext();
 
@@ -85,7 +143,8 @@ const LightWidget = () => {
     </div>
   );
 };
-
+*/
+/*
 const FanWidget = () => {
   const { client, fan } = useMqttContext();
 
@@ -110,5 +169,6 @@ const FanWidget = () => {
     </div>
   );
 };
+*/
 
 export default Dashboard;
