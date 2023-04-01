@@ -8,51 +8,21 @@ const emitter = new EventEmitter();
 const MqttContext = createContext();
 
 /**
- * Hook to Access Mqtt Client
- * @returns Mqtt Client
+ * Hook to Access Mqtt Client Functionality
+ * @returns Mqtt Client Members and Methods
  */
-export const useMqttClient = () => {
+export const useMqtt = () => {
   const context = useContext(MqttContext);
+  const client = context.client;
+  const connect = context.connect;
+  const subscribe = context.subscribe;
+  const unsubscribe = context.unsubscribe;
 
   if (!context) {
     throw Error("useMqttClient must be used inside of MqttContextProvider.");
   }
 
-  return context.client;
-};
-
-/**
- * Hook to Connect to Mqtt Broker
- * @returns Mqtt Connect Function
- */
-export const useMqttConnect = () => {
-  const context = useContext(MqttContext);
-
-  if (!context) {
-    throw Error("useMqttConnect must be used inside of MqttContextProvider.");
-  }
-
-  return context.connect;
-};
-
-export const useMqttSubscribe = () => {
-  const context = useContext(MqttContext);
-
-  if (!context) {
-    throw Error("useMqttConnect must be used inside of MqttContextProvider.");
-  }
-
-  return context.subscribe;
-};
-
-export const useMqttUnsubscribe = () => {
-  const context = useContext(MqttContext);
-
-  if (!context) {
-    throw Error("useMqttConnect must be used inside of MqttContextProvider.");
-  }
-
-  return context.unsubscribe;
+  return { client, connect, subscribe, unsubscribe };
 };
 
 export const MqttProvider = ({ children }) => {
@@ -87,6 +57,8 @@ export const MqttProvider = ({ children }) => {
    * @param {function} callback Function Called On Event Raised
    */
   function subscribe(event, callback) {
+    if (!mqttClient) return;
+
     mqttClient.subscribe(event);
     emitter.addListener(event, callback);
   }
@@ -97,6 +69,8 @@ export const MqttProvider = ({ children }) => {
    * @param {function} callback Function Called On Event Raised
    */
   function unsubscribe(event, callback) {
+    if (!mqttClient) return;
+
     mqttClient.unsubscribe(event);
     emitter.removeListener(event, callback);
   }

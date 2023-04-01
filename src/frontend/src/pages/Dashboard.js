@@ -5,12 +5,7 @@ import dashboard from "../assets/css/dashboard.css";
 import GaugeChart from "react-gauge-chart";
 import { useState, useRef, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import {
-  useMqttClient,
-  useMqttConnect,
-  useMqttSubscribe,
-  useMqttUnsubscribe,
-} from "../contexts/MqttContext";
+import { useMqtt } from "../contexts/MqttContext";
 
 import { ReactComponent as Light } from "../assets/img/light.svg";
 
@@ -24,12 +19,11 @@ import { ReactComponent as FanOff } from "../assets/img/fan-off.svg";
  * Dashboard Page
  */
 const Dashboard = () => {
-  const mqttClient = useMqttClient();
-  const connect = useMqttConnect();
+  const { client, connect } = useMqtt();
 
   useState(() => {
-    if (!mqttClient) connect();
-  }, [mqttClient]);
+    if (!client) connect();
+  }, [client]);
 
   return (
     <div className="dashboard">
@@ -43,9 +37,7 @@ const Dashboard = () => {
 
 const TemperatureGauge = () => {
   const [temperature, setTemperature] = useState(0);
-  const mqttClient = useMqttClient();
-  const subscribe = useMqttSubscribe();
-  const unsubscribe = useMqttUnsubscribe();
+  const { client, subscribe, unsubscribe } = useMqtt();
 
   const onTemperatureReceived = (string) => {
     setTemperature(parseFloat(string));
@@ -53,16 +45,12 @@ const TemperatureGauge = () => {
   };
 
   useEffect(() => {
-    if (mqttClient) {
-      subscribe("safehouse/temperature", onTemperatureReceived);
-    }
+    subscribe("safehouse/temperature", onTemperatureReceived);
 
     return () => {
-      if (mqttClient) {
-        unsubscribe("safehouse/temperature", onTemperatureReceived);
-      }
+      unsubscribe("safehouse/temperature", onTemperatureReceived);
     };
-  }, [mqttClient]);
+  }, [client]);
 
   return (
     <GaugeChart
@@ -76,9 +64,7 @@ const TemperatureGauge = () => {
 
 const HumidityGauge = () => {
   const [humidity, setHumidity] = useState(0);
-  const mqttClient = useMqttClient();
-  const subscribe = useMqttSubscribe();
-  const unsubscribe = useMqttUnsubscribe();
+  const { client, subscribe, unsubscribe } = useMqtt();
 
   const onHumidityReceived = (string) => {
     setHumidity(parseFloat(string));
@@ -86,16 +72,12 @@ const HumidityGauge = () => {
   };
 
   useEffect(() => {
-    if (mqttClient) {
-      subscribe("safehouse/humidity", onHumidityReceived);
-    }
+    subscribe("safehouse/humidity", onHumidityReceived);
 
     return () => {
-      if (mqttClient) {
-        unsubscribe("safehouse/humidity", onHumidityReceived);
-      }
+      unsubscribe("safehouse/humidity", onHumidityReceived);
     };
-  }, [mqttClient]);
+  }, [client]);
 
   return (
     <GaugeChart
