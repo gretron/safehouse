@@ -27,16 +27,7 @@ const Dashboard = () => {
   const mqttClient = useMqttClient();
   const connect = useMqttConnect();
 
-  const loaded = useRef(false);
-
   useState(() => {
-    if (loaded.current) return;
-
-    loaded.current = true;
-
-    console.log("renders");
-
-    // connect(user);
     if (!mqttClient) connect();
   }, [mqttClient]);
 

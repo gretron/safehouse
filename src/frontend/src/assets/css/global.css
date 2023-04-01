@@ -83,6 +83,9 @@ body {
 
   overflow-y: scroll;
 }
+.page::-webkit-scrollbar {
+  display: none;
+}
 
 .sidebar {
   --padding: min(3rem, 3vw);
