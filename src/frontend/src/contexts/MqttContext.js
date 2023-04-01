@@ -25,6 +25,9 @@ export const useMqtt = () => {
   return { client, connect, subscribe, unsubscribe };
 };
 
+/**
+ * Mqtt Context Provider
+ */
 export const MqttProvider = ({ children }) => {
   const [mqttClient, setMqttClient] = useState(null);
   const { user } = useAuthContext();
@@ -34,9 +37,13 @@ export const MqttProvider = ({ children }) => {
       return;
     }
 
-    function onConnectionLost(responseObject) {
-      if (responseObject.errorCode !== 0) {
-        console.log("Connection lost:", responseObject.errorMessage);
+    /**
+     * Handler for Mqtt Client Connection Lost
+     * @param {object} res Response of Connection Lost
+     */
+    function onConnectionLost(res) {
+      if (res.errorCode !== 0) {
+        console.log("Connection lost:", res.errorMessage);
       }
     }
 
@@ -53,7 +60,7 @@ export const MqttProvider = ({ children }) => {
 
   /**
    * Subscribe to Mqtt Topic
-   * @param {string} event Name of Event
+   * @param {string} event Name of Topic
    * @param {function} callback Function Called On Event Raised
    */
   function subscribe(event, callback) {
@@ -65,7 +72,7 @@ export const MqttProvider = ({ children }) => {
 
   /**
    * Unsubscribe to Mqtt Topic
-   * @param {string} event Name of Event
+   * @param {string} event Name of Topic
    * @param {function} callback Function Called On Event Raised
    */
   function unsubscribe(event, callback) {
@@ -75,14 +82,19 @@ export const MqttProvider = ({ children }) => {
     emitter.removeListener(event, callback);
   }
 
+  /**
+   * Connect to Mqtt Broker
+   */
   function connect() {
     if (mqttClient) {
       mqttClient.disconnect();
       setMqttClient(null);
     }
 
+    // Generate Random Client Token
     const clientId = "mqttjs_" + Math.random().toString(16).substr(2, 8);
 
+    // Connect to Mqtt Client with Credentials
     const newClient = new Client(
       process.env.REACT_APP_MQTT_HOST,
       parseInt(process.env.REACT_APP_MQTT_PORT),

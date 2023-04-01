@@ -15,6 +15,9 @@ import { ReactComponent as LightOff } from "../assets/img/light-off.svg";
 import { ReactComponent as FanOn } from "../assets/img/fan-on.svg";
 import { ReactComponent as FanOff } from "../assets/img/fan-off.svg";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 /**
  * Dashboard Page
  */
@@ -25,12 +28,16 @@ const Dashboard = () => {
     if (!client) connect();
   }, [client]);
 
+  const notify = () => toast("Wow so easy!");
+
   return (
     <div className="dashboard">
       {/*<LightWidget />
       <FanWidget />*/}
       <HumidityGauge />
       <TemperatureGauge />
+      <button onClick={notify}>Try</button>
+      <ToastContainer />
     </div>
   );
 };
