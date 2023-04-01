@@ -6,6 +6,7 @@ import GaugeChart from "react-gauge-chart";
 import { useState, useRef, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useMqtt } from "../contexts/MqttContext";
+import Sidebar from "../components/Sidebar";
 
 import { ReactComponent as Light } from "../assets/img/light.svg";
 
@@ -31,14 +32,17 @@ const Dashboard = () => {
   const notify = () => toast("Wow so easy!");
 
   return (
-    <div className="dashboard">
-      {/*<LightWidget />
+    <>
+      <div className="dashboard">
+        {/*<LightWidget />
       <FanWidget />*/}
-      <HumidityGauge />
-      <TemperatureGauge />
-      <button onClick={notify}>Try</button>
-      <ToastContainer />
-    </div>
+        <HumidityGauge />
+        <TemperatureGauge />
+        {/*<button onClick={notify}>Try</button>*/}
+        <ToastContainer />
+      </div>
+      <Sidebar />
+    </>
   );
 };
 
@@ -62,6 +66,7 @@ const TemperatureGauge = () => {
   return (
     <GaugeChart
       id="gauge--2"
+      className="gauge"
       percent={temperature / 100}
       formatTextValue={(value) => value + "°C"}
       nrOfLevels={16}
@@ -89,6 +94,7 @@ const HumidityGauge = () => {
   return (
     <GaugeChart
       id="gauge--1"
+      className="gauge"
       percent={humidity / 100}
       nrOfLevels={1}
       colors={["#3477eb"]}

@@ -1,10 +1,13 @@
 .dashboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 200px;
+
   --padding: 2rem;
 
   color: var(--white);
-  background: var(--accent);
 
-  flex-basis: calc(20% - var(--padding) * 2);
+  flex-grow: 1;
 
   padding: var(--padding);
   border-radius: 2rem;
@@ -27,4 +30,16 @@
 
 .light-widget--active svg {
   fill: yellow;
+}
+
+.sidebar {
+  display: none;
+
+  --padding: min(3rem, 3vw);
+
+  background-color: var(--secondary);
+  flex-basis: min(28vw, 28rem);
+  justify-self: end;
+
+  padding: var(--padding);
 }

@@ -8,7 +8,6 @@ import Light from "./pages/Light";
 
 // Components
 import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
 
 // Styles
 import global from "./assets/css/global.css";
@@ -43,7 +42,6 @@ function App() {
             />
           </Routes>
         </div>
-        <Sidebar />
       </BrowserRouter>
     </div>
   );
