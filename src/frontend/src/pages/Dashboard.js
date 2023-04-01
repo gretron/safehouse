@@ -24,6 +24,7 @@ import { ReactComponent as FanOff } from "../assets/img/fan-off.svg";
  * Dashboard Page
  */
 const Dashboard = () => {
+  const mqttClient = useMqttClient();
   const connect = useMqttConnect();
 
   const loaded = useRef(false);
@@ -36,8 +37,8 @@ const Dashboard = () => {
     console.log("renders");
 
     // connect(user);
-    connect();
-  }, []);
+    if (!mqttClient) connect();
+  }, [mqttClient]);
 
   return (
     <div className="dashboard">
