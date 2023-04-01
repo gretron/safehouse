@@ -34,8 +34,8 @@ const Dashboard = () => {
   return (
     <>
       <div className="dashboard">
-        {/*<LightWidget />
-      <FanWidget />*/}
+        <LightWidget />
+        <FanWidget />
         <HumidityGauge />
         <TemperatureGauge />
         {/*<button onClick={notify}>Try</button>*/}
@@ -105,12 +105,24 @@ const HumidityGauge = () => {
 /**
  * Widget for Light Electrical Component
  */
-/*
 const LightWidget = () => {
-  const { client, light } = useMqttContext();
+  const [light, setLight] = useState(0);
+  const { client, publish, subscribe, unsubscribe } = useMqtt();
+
+  const onLightReceived = (string) => {
+    setLight(parseInt(string));
+  };
+
+  useEffect(() => {
+    subscribe("safehouse/light", onLightReceived);
+
+    return () => {
+      unsubscribe("safehouse/light", onLightReceived);
+    };
+  }, [client]);
 
   const handleClick = async () => {
-    client.publish(
+    publish(
       "safehouse/light",
       light ? (light == "1" ? "0" : "1") : "1",
       0,
@@ -123,25 +135,35 @@ const LightWidget = () => {
       <button
         className={light == "1" ? "light-widget--active" : ""}
         style={{ aspectRatio: "1 / 1", width: "10rem" }}
-        onClick={() => handleClick()}
+        onClick={handleClick}
       >
         {light == 1 ? <LightOn /> : <LightOff />}
       </button>
     </div>
   );
 };
-*/
-/*
+
+/**
+ * Widget for Fan Electrical Component
+ */
 const FanWidget = () => {
-  const { client, fan } = useMqttContext();
+  const [fan, setFan] = useState(0);
+  const { client, publish, subscribe, unsubscribe } = useMqtt();
+
+  const onFanReceived = (string) => {
+    setFan(parseInt(string));
+  };
+
+  useEffect(() => {
+    subscribe("safehouse/fan", onFanReceived);
+
+    return () => {
+      unsubscribe("safehouse/fan", onFanReceived);
+    };
+  }, [client]);
 
   const handleClick = async () => {
-    client.publish(
-      "safehouse/fan",
-      fan ? (fan == "1" ? "0" : "1") : "1",
-      0,
-      true
-    );
+    publish("safehouse/fan", fan ? (fan == "1" ? "0" : "1") : "1", 0, true);
   };
 
   return (
@@ -149,13 +171,12 @@ const FanWidget = () => {
       <button
         className={fan == "1" ? "light-widget--active" : ""}
         style={{ aspectRatio: "1 / 1", width: "10rem" }}
-        onClick={() => handleClick()}
+        onClick={handleClick}
       >
         {fan == 1 ? <FanOn /> : <FanOff />}
       </button>
     </div>
   );
 };
-*/
 
 export default Dashboard;

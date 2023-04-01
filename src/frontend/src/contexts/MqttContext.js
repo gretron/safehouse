@@ -15,6 +15,7 @@ export const useMqtt = () => {
   const context = useContext(MqttContext);
   const client = context.client;
   const connect = context.connect;
+  const publish = context.publish;
   const subscribe = context.subscribe;
   const unsubscribe = context.unsubscribe;
 
@@ -22,7 +23,7 @@ export const useMqtt = () => {
     throw Error("useMqttClient must be used inside of MqttContextProvider.");
   }
 
-  return { client, connect, subscribe, unsubscribe };
+  return { client, connect, publish, subscribe, unsubscribe };
 };
 
 /**
@@ -56,6 +57,17 @@ export const MqttProvider = ({ children }) => {
 
   function onMessageArrived(message) {
     emitter.emit(message.topic, message.payloadString);
+  }
+
+  /**
+   * Publish Message to Mqtt Topic
+   * @param {string} topic Topic to Publish to
+   * @param {string} message Message to Send to Topic
+   * @param {int} qos QoS of Message
+   * @param {boolean} retain Retain Message in Topic
+   */
+  function publish(topic, message, qos = 0, retain = false) {
+    mqttClient.publish(topic, message, qos, retain);
   }
 
   /**
@@ -120,7 +132,7 @@ export const MqttProvider = ({ children }) => {
 
   return (
     <MqttContext.Provider
-      value={{ client: mqttClient, connect, subscribe, unsubscribe }}
+      value={{ client: mqttClient, connect, publish, subscribe, unsubscribe }}
     >
       {children}
     </MqttContext.Provider>
