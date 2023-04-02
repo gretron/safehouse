@@ -11,6 +11,7 @@ import Sidebar from "../components/Sidebar";
 import LightWidget from "../components/LightWidget";
 import FanWidget from "../components/FanWidget";
 import TemperatureWidget from "../components/TemperatureWidget";
+import LightIntensityWidget from "../components/LightIntensityWidget";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,7 +40,7 @@ function Dashboard() {
         <FanWidget />
         <HumidityWidget />
         <TemperatureWidget />
-
+        <LightIntensityWidget />
         {/*<button onClick={notify}>Try</button>*/}
         <ToastContainer />
       </div>

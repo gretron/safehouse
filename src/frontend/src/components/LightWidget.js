@@ -11,7 +11,7 @@ import Widget from "./Widget";
  * Widget for Light State
  */
 const LightWidget = ({ view }) => {
-  const [light, setLight] = useState(0);
+  const [light, setLight] = useState(1);
   const { client, publish, subscribe, unsubscribe } = useMqtt();
 
   const onLightReceived = (string) => {
