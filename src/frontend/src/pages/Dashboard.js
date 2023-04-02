@@ -14,6 +14,7 @@ import TemperatureWidget from "../components/TemperatureWidget";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import HumidityWidget from "../components/HumidityWidget";
 
 /**
  * Dashboard Page
@@ -36,7 +37,7 @@ function Dashboard() {
         {/*<LightWidget />*/}
         <LightWidget view={view} />
         <FanWidget />
-        <HumidityGauge />
+        <HumidityWidget />
         <TemperatureWidget />
 
         {/*<button onClick={notify}>Try</button>*/}
@@ -46,33 +47,5 @@ function Dashboard() {
     </>
   );
 }
-
-const HumidityGauge = () => {
-  const [humidity, setHumidity] = useState(0);
-  const { client, subscribe, unsubscribe } = useMqtt();
-
-  const onHumidityReceived = (string) => {
-    setHumidity(parseFloat(string));
-    console.log("Humidity: ", string);
-  };
-
-  useEffect(() => {
-    subscribe("safehouse/humidity", onHumidityReceived);
-
-    return () => {
-      unsubscribe("safehouse/humidity", onHumidityReceived);
-    };
-  }, [client]);
-
-  return (
-    <GaugeChart
-      id="gauge--1"
-      className="gauge"
-      percent={humidity / 100}
-      nrOfLevels={1}
-      colors={["#3477eb"]}
-    />
-  );
-};
 
 export default Dashboard;

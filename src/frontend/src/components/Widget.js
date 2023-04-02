@@ -1,13 +1,21 @@
 /**
  * Widget Container
  */
-const Widget = ({ label, value, unit, showState, state, children }) => {
+const Widget = ({
+  label,
+  value,
+  unit,
+  showState,
+  state,
+  children,
+  className,
+}) => {
   return (
-    <div className="widget">
+    <div className={`widget ${className}`}>
       {children}
-      {label && <div className="widget__label">{label}</div>}
-      {value && <div className="widget__value">{value}</div>}
-      {unit && <div className="widget__unit">{unit}</div>}
+      {label !== null && <div className="widget__label">{label}</div>}
+      {value !== null && <div className="widget__value">{value}</div>}
+      {unit !== null && <div className="widget__unit">{unit}</div>}
       {showState && (
         <label class="switch">
           <input type="checkbox" checked={state} />
