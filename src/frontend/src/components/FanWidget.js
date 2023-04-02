@@ -38,7 +38,7 @@ const FanWidget = ({ view }) => {
       state={fan == 1}
     >
       <button
-        className="widget__light"
+        className="widget__icon"
         style={{ aspectRatio: "1 / 1", width: "10rem" }}
         onClick={handleClick}
       >

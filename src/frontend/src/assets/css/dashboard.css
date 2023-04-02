@@ -37,7 +37,7 @@
   font-size: 2rem;
 }
 
-.widget__light, .widget__fan {
+.widget__icon {
   background: none;
 
   align-self: center;
@@ -45,6 +45,16 @@
   cursor: pointer;
 
   border: none;
+}
+
+.widget__unit {
+  color: var(--neutral-dark);
+
+  font-size: 0.9rem;
+}
+
+.widget__icon--thermo {
+  margin-bottom: 10px;
 }
 
 .sidebar {

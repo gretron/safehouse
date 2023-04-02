@@ -10,6 +10,7 @@ import { useMqtt } from "../contexts/MqttContext";
 import Sidebar from "../components/Sidebar";
 import LightWidget from "../components/LightWidget";
 import FanWidget from "../components/FanWidget";
+import TemperatureWidget from "../components/TemperatureWidget";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,7 +37,7 @@ function Dashboard() {
         <LightWidget view={view} />
         <FanWidget />
         <HumidityGauge />
-        <TemperatureGauge />
+        <TemperatureWidget />
 
         {/*<button onClick={notify}>Try</button>*/}
         <ToastContainer />
@@ -45,37 +46,6 @@ function Dashboard() {
     </>
   );
 }
-
-const TemperatureGauge = () => {
-  const [temperature, setTemperature] = useState(20);
-  const { client, subscribe, unsubscribe } = useMqtt();
-
-  const onTemperatureReceived = (string) => {
-    setTemperature(parseFloat(string));
-    console.log("Temperature: ", string);
-  };
-
-  useEffect(() => {
-    subscribe("safehouse/temperature", onTemperatureReceived);
-
-    return () => {
-      unsubscribe("safehouse/temperature", onTemperatureReceived);
-    };
-  }, [client]);
-
-  return (
-    <div className="widget">
-      <Thermometer
-        theme="dark"
-        value={temperature}
-        max="100"
-        format="°C"
-        size="large"
-        height="200"
-      />
-    </div>
-  );
-};
 
 const HumidityGauge = () => {
   const [humidity, setHumidity] = useState(0);
