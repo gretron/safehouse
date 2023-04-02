@@ -35,7 +35,7 @@ const TemperatureWidget = () => {
           max="100"
           format="°C"
           size="large"
-          height="150"
+          height="200"
         />
       </div>
     </Widget>
