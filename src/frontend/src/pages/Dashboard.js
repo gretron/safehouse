@@ -9,14 +9,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useMqtt } from "../contexts/MqttContext";
 import Sidebar from "../components/Sidebar";
 import LightWidget from "../components/LightWidget";
-
-import { ReactComponent as Light } from "../assets/img/light.svg";
-
-import { ReactComponent as LightOn } from "../assets/img/light-on.svg";
-import { ReactComponent as LightOff } from "../assets/img/light-off.svg";
-
-import { ReactComponent as FanOn } from "../assets/img/fan-on.svg";
-import { ReactComponent as FanOff } from "../assets/img/fan-off.svg";
+import FanWidget from "../components/FanWidget";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -109,42 +102,6 @@ const HumidityGauge = () => {
       nrOfLevels={1}
       colors={["#3477eb"]}
     />
-  );
-};
-
-/**
- * Widget for Fan Electrical Component
- */
-const FanWidget = () => {
-  const [fan, setFan] = useState(0);
-  const { client, publish, subscribe, unsubscribe } = useMqtt();
-
-  const onFanReceived = (string) => {
-    setFan(parseInt(string));
-  };
-
-  useEffect(() => {
-    subscribe("safehouse/fan", onFanReceived);
-
-    return () => {
-      unsubscribe("safehouse/fan", onFanReceived);
-    };
-  }, [client]);
-
-  const handleClick = async () => {
-    publish("safehouse/fan", fan ? (fan == "1" ? "0" : "1") : "1", 0, true);
-  };
-
-  return (
-    <div className="light-widget widget">
-      <button
-        className={fan == "1" ? "light-widget--active" : ""}
-        style={{ aspectRatio: "1 / 1", width: "10rem" }}
-        onClick={handleClick}
-      >
-        {fan == 1 ? <FanOn /> : <FanOff />}
-      </button>
-    </div>
   );
 };
 

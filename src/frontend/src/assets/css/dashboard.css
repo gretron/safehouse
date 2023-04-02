@@ -37,7 +37,7 @@
   font-size: 2rem;
 }
 
-.widget__light {
+.widget__light, .widget__fan {
   background: none;
 
   align-self: center;

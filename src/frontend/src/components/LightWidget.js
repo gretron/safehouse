@@ -40,7 +40,7 @@ const LightWidget = ({ view }) => {
       label="Light"
       value={light == 1 ? "On" : "Off"}
       showState={true}
-      state={light == 0}
+      state={light == 1}
     >
       <button
         className="widget__light"

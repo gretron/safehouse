@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
-import Light from "./pages/Light";
 
 // Components
 import Navbar from "./components/Navbar";
