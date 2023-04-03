@@ -24,7 +24,7 @@ const LightIntensityWidget = ({ view }) => {
     const value = parseInt(string);
     setLightIntensity(value);
 
-    const percentage = value / 500;
+    const percentage = value / 1023;
 
     console.log(percentage);
 
@@ -55,7 +55,14 @@ const LightIntensityWidget = ({ view }) => {
         onClick={() => onLightIntensityReceived("500")}
       >
         <Sun />
-        <input type="range" min={0} max={500} step={1} />
+        <input
+          className="widget__slider"
+          type="range"
+          min={0}
+          max={1023}
+          value={lightIntensity}
+          step={1}
+        />
       </div>
     </Widget>
   );
