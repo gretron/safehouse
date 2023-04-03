@@ -27,7 +27,7 @@ function Dashboard() {
   const view = useRef();
 
   useState(() => {
-    // if (!client) connect();
+    if (!client) connect();
   }, [client]);
 
   const notify = () => toast("Wow so easy!");
@@ -42,8 +42,8 @@ function Dashboard() {
         <TemperatureWidget />
         <LightIntensityWidget />
         {/*<button onClick={notify}>Try</button>*/}
-        <ToastContainer />
       </div>
+      <ToastContainer />
       <Sidebar />
     </>
   );

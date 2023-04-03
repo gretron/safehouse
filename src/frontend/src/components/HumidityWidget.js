@@ -32,7 +32,7 @@ const HumidityWidget = () => {
     >
       <GaugeChart
         id="gauge--1"
-        className="gauge"
+        className="gauge widget__icon"
         percent={humidity / 100}
         nrOfLevels={1}
         colors={["#3477eb"]}
