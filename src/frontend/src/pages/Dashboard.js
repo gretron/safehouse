@@ -28,6 +28,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (!client) connect();
+    console.log("Connecting")
   }, [client]);
 
   return (
