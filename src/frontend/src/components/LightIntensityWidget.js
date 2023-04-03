@@ -52,9 +52,10 @@ const LightIntensityWidget = ({ view }) => {
       <div
         ref={sunRef}
         className="widget__icon"
-        onClick={() => onLightIntensityReceived("400")}
+        onClick={() => onLightIntensityReceived("500")}
       >
         <Sun />
+        <input type="range" min={0} max={500} step={1} />
       </div>
     </Widget>
   );

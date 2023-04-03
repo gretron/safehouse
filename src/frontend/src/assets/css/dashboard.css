@@ -50,6 +50,10 @@
 .widget__icon {
   background: none;
 
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
   align-self: center;
   
   cursor: pointer;
@@ -145,3 +149,4 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
