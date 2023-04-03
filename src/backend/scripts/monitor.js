@@ -27,9 +27,12 @@ const monitor = function () {
 
       client.subscribe("safehouse/light");
       client.subscribe("safehouse/fan");
+      client.subscribe("safehouse/light-intensity");
 
-      client.publish("safehouse/ligt", "0", { retain: true });
+      client.publish("safehouse/light", "0", { retain: true });
       client.publish("safehouse/fan", "0", { retain: true });
+
+      global.checkLightIntensity = true;
 
       client.on("message", (topic, message) => {
         switch (topic) {
@@ -55,6 +58,26 @@ const monitor = function () {
             } else if (message.includes("0")) {
               enable.write(gpio.LOW);
             }
+
+            break;
+          case "safehouse/light-intensity":
+            if (parseInt(message) < 400 && global.checkLightIntensity) {
+              const today = new Date();
+
+              sendMail("davidanotrudeau@gmail.com", 
+                  "Safehouse Alert: Light", 
+                  `The Light is ON at ${today.getHours()}:${today.getMinutes()}`);
+              client.publish("safehouse/notification", "Email has been sent.");
+              client.publish("safehouse/light", "1");
+
+              global.checkLightIntensity = false;
+
+              setTimeout(() => {
+                global.checkLightIntensity = true;
+              }, 10000)
+            } 
+            
+            break;
           default:
             break;
         }
@@ -64,7 +87,7 @@ const monitor = function () {
     let canSendMail = true;
 
     setInterval(() => {
-      sensor.read(11, 20, function(err, temperature, humidity) {
+      sensor.read(11, 26, function(err, temperature, humidity) {
         if (!err) {
           console.log(`temp: ${temperature}°C, humidity: ${humidity}%`);
           client.publish("safehouse/temperature", temperature.toString());
