@@ -1,48 +1,51 @@
-import light from "../assets/img/light.svg";
-import { ReactComponent as Light } from "../assets/img/light.svg";
+// Components
+import { ReactComponent as LightOn } from "../assets/img/light-on.svg";
+import { ReactComponent as LightOff } from "../assets/img/light-off.svg";
 
 // Hooks
-import { useEffect, useState } from "react";
-import { useLightState } from "../hooks/useLightState";
+import { useMqtt } from "../contexts/MqttContext";
+import { useState, useEffect } from "react";
+import Widget from "./Widget";
 
 /**
- * Widget for Light Electrical Component
+ * Widget for Light State
  */
-const LightWidget = () => {
-  const [state, setState] = useState(false);
-  const { getLightState, setLightState, loading, error } = useLightState();
+const LightWidget = ({ view }) => {
+  const [light, setLight] = useState(1);
+  const { client, publish, subscribe, unsubscribe } = useMqtt();
+
+  const onLightReceived = (string) => {
+    setLight(parseInt(string));
+  };
 
   useEffect(() => {
-    const fetchState = async () => {
-      const newState = await getLightState();
+    subscribe("safehouse/light", onLightReceived);
 
-      console.log(newState);
-
-      setState(newState != 0);
+    return () => {
+      unsubscribe("safehouse/light", onLightReceived);
     };
-
-    fetchState();
-  }, []);
+  }, [client]);
 
   const handleClick = async () => {
-    const newState = await setLightState(!state);
-
-    console.log(newState);
-
-    setState(newState != 0);
+    publish(
+      "safehouse/light",
+      light ? (light == "1" ? "0" : "1") : "1",
+      0,
+      true
+    );
   };
 
   return (
-    <div className="light-widget">
-      <button
-        className={state ? "light-widget--active" : ""}
-        style={{ aspectRatio: "1 / 1", width: "10rem" }}
-        onClick={() => handleClick()}
-      >
-        {!loading && <Light />}
-        <div>{error}</div>
+    <Widget
+      label="Light"
+      value={light == 1 ? "On" : "Off"}
+      showState={true}
+      state={light == 1}
+    >
+      <button className="widget__icon" onClick={handleClick}>
+        {light == 1 ? <LightOn /> : <LightOff />}
       </button>
-    </div>
+    </Widget>
   );
 };
 

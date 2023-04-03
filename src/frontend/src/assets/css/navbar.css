@@ -16,7 +16,8 @@
 }
 
 .navbar__brand {
-  margin: 0 min(4vw, 4rem);
+  margin: 0 auto;
+  width: min(12vw, 3rem);
 }
 
 .navbar__user-name {

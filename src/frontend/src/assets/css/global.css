@@ -75,23 +75,13 @@ body {
 }
 
 .page {
-  --padding: min(3rem, 3vw);
-
+  display: flex;
   flex-grow: 1;
-
-  padding: var(--padding);
-
-  overflow-y: scroll;
+  flex-direction: row;
 }
 
-.sidebar {
-  --padding: min(3rem, 3vw);
-
-  background-color: var(--secondary);
-
-  flex-basis: min(28vw, 28rem);
-
-  padding: var(--padding);
+.page::-webkit-scrollbar {
+  display: none;
 }
 
 .field {

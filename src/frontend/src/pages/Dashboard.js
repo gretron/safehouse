@@ -3,112 +3,50 @@ import dashboard from "../assets/css/dashboard.css";
 
 // Components
 import GaugeChart from "react-gauge-chart";
-import { useMqttContext } from "../hooks/useMqttContext";
-import { useState, useRef } from "react";
-import { useMqtt } from "../hooks/useMqtt";
+import Thermometer from "react-thermometer-component";
+import { useState, useRef, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useMqtt } from "../contexts/MqttContext";
+import Sidebar from "../components/Sidebar";
+import LightWidget from "../components/LightWidget";
+import FanWidget from "../components/FanWidget";
+import TemperatureWidget from "../components/TemperatureWidget";
+import LightIntensityWidget from "../components/LightIntensityWidget";
 
-import { ReactComponent as Light } from "../assets/img/light.svg";
-
-import { ReactComponent as LightOn } from "../assets/img/light-on.svg";
-import { ReactComponent as LightOff } from "../assets/img/light-off.svg";
-
-import { ReactComponent as FanOn } from "../assets/img/fan-on.svg";
-import { ReactComponent as FanOff } from "../assets/img/fan-off.svg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import HumidityWidget from "../components/HumidityWidget";
 
 /**
  * Dashboard Page
  */
-const Dashboard = () => {
-  const { user } = useAuthContext();
-  const { connect } = useMqtt();
-  const { humidity, temperature } = useMqttContext();
+function Dashboard() {
+  const { client, connect } = useMqtt();
 
-  const loaded = useRef(false);
+  const ref = useRef();
+  const view = useRef();
 
   useState(() => {
-    if (loaded.current) return;
+    if (!client) connect();
+  }, [client]);
 
-    loaded.current = true;
-
-    console.log("renders");
-
-    connect(user);
-  }, []);
+  const notify = () => toast("Wow so easy!");
 
   return (
-    <div className="dashboard">
-      <LightWidget />
-      <FanWidget />
-      <GaugeChart
-        id="gauge--1"
-        animate={false}
-        percent={Number(humidity) / 100}
-        nrOfLevels={1}
-        colors={["#3477eb"]}
-      />
-      <GaugeChart
-        id="gauge--2"
-        animate={false}
-        percent={Number(temperature) / 100}
-        formatTextValue={(value) => value + "°C"}
-        nrOfLevels={16}
-      />
-    </div>
+    <>
+      <div ref={ref} className="dashboard">
+        {/*<LightWidget />*/}
+        <LightWidget view={view} />
+        <FanWidget />
+        <HumidityWidget />
+        <TemperatureWidget />
+        <LightIntensityWidget />
+        {/*<button onClick={notify}>Try</button>*/}
+      </div>
+      <ToastContainer />
+      <Sidebar />
+    </>
   );
-};
-
-/**
- * Widget for Light Electrical Component
- */
-const LightWidget = () => {
-  const { client, light } = useMqttContext();
-
-  const handleClick = async () => {
-    client.publish(
-      "safehouse/light",
-      light ? (light == "1" ? "0" : "1") : "1",
-      0,
-      true
-    );
-  };
-
-  return (
-    <div className="light-widget">
-      <button
-        className={light == "1" ? "light-widget--active" : ""}
-        style={{ aspectRatio: "1 / 1", width: "10rem" }}
-        onClick={() => handleClick()}
-      >
-        {light == 1 ? <LightOn /> : <LightOff />}
-      </button>
-    </div>
-  );
-};
-
-const FanWidget = () => {
-  const { client, fan } = useMqttContext();
-
-  const handleClick = async () => {
-    client.publish(
-      "safehouse/fan",
-      fan ? (fan == "1" ? "0" : "1") : "1",
-      0,
-      true
-    );
-  };
-
-  return (
-    <div className="light-widget">
-      <button
-        className={fan == "1" ? "light-widget--active" : ""}
-        style={{ aspectRatio: "1 / 1", width: "10rem" }}
-        onClick={() => handleClick()}
-      >
-        {fan == 1 ? <FanOn /> : <FanOff />}
-      </button>
-    </div>
-  );
-};
+}
 
 export default Dashboard;
