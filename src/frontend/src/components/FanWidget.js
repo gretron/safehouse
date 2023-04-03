@@ -45,13 +45,9 @@ const FanWidget = ({ view }) => {
       showState={true}
       state={fan == 1}
     >
-      <button
-        className="widget__icon"
-        style={{ aspectRatio: "1 / 1", width: "10rem" }}
-        onClick={handleClick}
-      >
+      <button className="widget__icon" onClick={handleClick}>
         {fan == 1 ? (
-          <animated.div style={props}>
+          <animated.div className="widget__fan" style={props}>
             <FanOn />
           </animated.div>
         ) : (

@@ -42,11 +42,7 @@ const LightWidget = ({ view }) => {
       showState={true}
       state={light == 1}
     >
-      <button
-        className="widget__icon"
-        style={{ aspectRatio: "1 / 1", width: "10rem" }}
-        onClick={handleClick}
-      >
+      <button className="widget__icon" onClick={handleClick}>
         {light == 1 ? <LightOn /> : <LightOff />}
       </button>
     </Widget>
