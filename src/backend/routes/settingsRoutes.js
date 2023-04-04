@@ -13,7 +13,7 @@ const router = express.Router();
 // Require Authentication for Settings Routes
 router.use(requireAuth);
 
-router.put("/settings", handlePutSettings);
+router.put("/", handlePutSettings);
 
 // Exports
 module.exports = router;

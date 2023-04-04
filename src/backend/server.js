@@ -30,13 +30,14 @@ app.use((err, req, res, next) => {
 });
 app.use((req, res, next) => {
   // Print Request Path and Method
-  // console.log(req.path, req.method);
+  console.log(req.path, req.method);
   next();
 });
 
 // Routes
 app.use("/api/user", userRoutes);
 app.use("/api/light", lightRoutes);
+app.use("/api/settings", lightRoutes);
 
 // Listen for Requests
 global.db = new sqlite3.Database(
