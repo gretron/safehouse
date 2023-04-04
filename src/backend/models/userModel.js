@@ -55,7 +55,7 @@ function createUser(email, hash_password) {
 
     // Create New User
     const createUserQuery =
-      "INSERT INTO user (user_email, user_password, temperature_threshold, humidity_threshold, light_intensity_threshold) VALUES (?, ?)";
+      "INSERT INTO user (user_email, user_password, temperature_threshold, humidity_threshold, light_intensity_threshold) VALUES (?, ?, ?, ?, ?)";
     db.run(
       createUserQuery,
       [email, hash_password, 25, 50, 400],
