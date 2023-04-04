@@ -55,14 +55,18 @@ function createUser(email, hash_password) {
 
     // Create New User
     const createUserQuery =
-      "INSERT INTO user (user_email, user_password) VALUES (?, ?)";
-    db.run(createUserQuery, [email, hash_password], function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID);
+      "INSERT INTO user (user_email, user_password, temperature_threshold, humidity_threshold, light_intensity_threshold) VALUES (?, ?)";
+    db.run(
+      createUserQuery,
+      [email, hash_password, 25, 50, 400],
+      function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this.lastID);
+        }
       }
-    });
+    );
   });
 }
 
