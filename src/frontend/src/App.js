@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 
 // Hooks
 import { useAuthContext } from "./hooks/useAuthContext";
+import Settings from "./pages/Settings";
 
 // #endregion
 
@@ -38,6 +39,11 @@ function App() {
             <Route
               path="/register"
               element={!user ? <Register /> : <Navigate to="/" />}
+            />
+            <Route path="/settings" element={<Settings />} />
+            <Route
+              path="*"
+              element={user ? <Navigate to="/" /> : <Navigate to="/login" />}
             />
           </Routes>
         </div>

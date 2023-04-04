@@ -1,0 +1,38 @@
+.settings {
+  width: min(90%, 32rem);
+
+  margin: auto;
+  margin-top: 20vh;
+  padding: 2rem;
+
+  vertical-align: middle;
+
+  background: var(--secondary);
+
+  border-radius: 16px;
+}
+
+.settings .heading--1 {
+  margin-bottom: 2rem;
+}
+
+.settings .field {
+  margin-bottom: 1rem;
+}
+
+.settings .field input {
+  width: 100%;
+}
+
+.settings button {
+  margin-top: 1rem;
+
+  width: 100%;
+}
+
+.error {
+  background: #ff4949;
+
+  padding: 1rem;
+  border-radius: 8px;
+}
