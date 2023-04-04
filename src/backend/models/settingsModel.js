@@ -30,6 +30,23 @@ function updateSettings(user_id, temperature, humidity, light_intensity) {
   });
 }
 
+Settings.select = async (user_id) => {
+  let user;
+
+  try {
+    user = await User.exists(user_id);
+  } catch (err) {
+    console.error(err);
+    throw Error(err);
+  }
+
+  return {
+    temperature: user.temperature_threshold,
+    humidity: user.humidity_threshold,
+    light_intensity: user.light_intensity_threshold,
+  };
+};
+
 Settings.update = async (user_id, temperature, humidity, light_intensity) => {
   let user;
 

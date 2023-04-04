@@ -23,6 +23,24 @@ const handlePutSettings = async (req, res) => {
   }
 };
 
+/**
+ * Handle Settings GET Request
+ * @param {Request} req
+ * @param {Response} res
+ */
+const handleGetSettings = async (req, res) => {
+  const user_id = req.user.user_id;
+
+  try {
+    const settings = await Settings.select(user_id);
+
+    res.status(200).json(settings);
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
+};
+
 module.exports = {
+  handleGetSettings,
   handlePutSettings,
 };
