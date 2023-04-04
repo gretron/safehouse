@@ -6,7 +6,7 @@ const {
   loginUser,
   registerUser,
   verifyToken,
-  verifyAcl
+  verifyAcl,
 } = require("../controllers/userController");
 
 // Router
