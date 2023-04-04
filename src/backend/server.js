@@ -48,16 +48,16 @@ global.db = new sqlite3.Database(
 
         // Create User Table
         const createTableQuery =
-          "CREATE TABLE IF NOT EXISTS user (user_id INTEGER PRIMARY KEY, user_email TEXT, user_password TEXT)";
+          "CREATE TABLE IF NOT EXISTS user (user_id INTEGER PRIMARY KEY, user_email TEXT, user_password TEXT, temperature_threshold INTEGER, humidity_threshold INTEGER, light_intensity_threshold INTEGER)";
         global.db.run(createTableQuery, [], function (err) {
           if (err) console.error(err.message);
 
           // Create Default Admin User
           const createAdminQuery =
-            "INSERT OR IGNORE INTO User (user_id, user_email, user_password) VALUES (?, ?, ?)";
+            "INSERT OR IGNORE INTO User (user_id, user_email, user_password, temperature_threshold, humidity_threshold, light_intensity_threshold) VALUES (?, ?, ?, ?, ?, ?)";
           global.db.run(
             createAdminQuery,
-            [1, "admin", "password"],
+            [1, "admin", "password", 25, 50, 400],
             function (err) {
               if (err) console.error(err.message);
             }
