@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api/user", userRoutes);
 app.use("/api/light", lightRoutes);
-app.use("/api/settings", lightRoutes);
+app.use("/api/settings", settingsRoutes);
 
 // Listen for Requests
 global.db = new sqlite3.Database(
