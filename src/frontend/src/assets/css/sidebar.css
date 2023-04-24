@@ -1,0 +1,24 @@
+.thresholds {
+    --padding: min(2rem, 2vw);
+    background-color: var(--secondary);
+    position: relative;
+  
+    flex-basis: min(20vw, 20rem);
+    font-size: 1.2rem;
+
+    padding: var(--padding);
+}
+
+.thresholds > * {
+    margin-bottom: 2rem;
+}
+  
+.temperature{
+    width:4em;
+    height:4em;
+}
+
+.light{
+    width:3.8em;
+    height:3.8em;
+}
