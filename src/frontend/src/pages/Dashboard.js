@@ -27,10 +27,10 @@ function Dashboard() {
   const ref = useRef();
   const view = useRef();
 
-  // useEffect(() => {
-  //   if (!client) connect();
-  //   console.log("Connecting")
-  // }, [client]);
+  useEffect(() => {
+    if (!client) connect();
+    console.log("Connecting")
+  }, [client]);
 
   return (
     <>

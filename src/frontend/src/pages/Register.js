@@ -1,6 +1,7 @@
 // Hooks
-import { useState } from "react";
 import { useRegister } from "../hooks/useRegister";
+import { useMqtt } from "../contexts/MqttContext";
+import { useState, useEffect } from "react";
 
 // Styles
 import dashboard from "../assets/css/user.css";
@@ -9,10 +10,27 @@ import dashboard from "../assets/css/user.css";
  * Register Page
  */
 const Register = () => {
+  const [tag, setTag] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { register, loading, error } = useRegister();
+  const { client, connect, subscribe, unsubscribe } = useMqtt();
+
+  const onTagReceived = (tag) => {
+    setTag(tag);
+  };
+
+  useEffect(() => {
+    if (!client) connect();
+    console.log("Connecting")
+
+    subscribe("safehouse/register", onTagReceived);
+
+    return () => {
+      unsubscribe("safehouse/register", onTagReceived);
+    };
+  }, [client]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +43,15 @@ const Register = () => {
   return (
     <form className="register" onSubmit={handleSubmit}>
       <div className="heading--1">Register</div>
+      <div className="field">
+        <div className="field__label">RFID Tag</div>
+        <input
+          type="text"
+          placeholder="00 00 00 00"
+          onChange={(e) => setTag(e.target.value)}
+          value={tag}
+        />
+      </div>
       <div className="field">
         <div className="field__label">Email Address</div>
         <input

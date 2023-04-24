@@ -114,7 +114,7 @@ export const MqttProvider = ({ children }) => {
     );
 
     newClient.connect({
-      userName: user.token,
+      userName: /*user.token*/ "any",
       password: "any",
       useSSL: false,
       reconnect: true,
