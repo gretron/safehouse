@@ -47,6 +47,23 @@ Settings.select = async (user_id) => {
   };
 };
 
+Settings.selectAtTag = async (rfid_tag) => {
+  let user;
+
+  try {
+    user = await User.tagExists(rfid_tag);
+  } catch (err) {
+    console.error(err);
+    throw Error(err);
+  }
+
+  return {
+    temperature: user.temperature_threshold,
+    humidity: user.humidity_threshold,
+    light_intensity: user.light_intensity_threshold,
+  };
+}
+
 Settings.update = async (user_id, temperature, humidity, light_intensity) => {
   let user;
 

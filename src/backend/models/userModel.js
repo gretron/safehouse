@@ -44,21 +44,45 @@ function checkEmailExists(email) {
 }
 
 /**
+ * Verify If Tag Exists in Database
+ * @param {string} rfid_tag Tag to Verify
+ */
+function checkTagExists(rfid_tag) {
+  return new Promise((resolve, reject) => {
+    // Get Database
+    const db = global.db;
+
+    // Existing Tag Validation
+    const tagExistsQuery = "SELECT rfid_tag FROM User WHERE rfid_tag = ?";
+
+    db.get(tagExistsQuery, rfid_tag, function (err, res) {
+      if (err) {
+        reject(err);
+      } else if (res) {
+        reject("RFID Tag Already In Use");
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+/**
  * Create a New User in Database
  * @param {string} email Email of New User
  * @param {string} hash_password Hash Password of New User
  */
-function createUser(email, hash_password) {
+function createUser(rfid_tag, email, hash_password) {
   return new Promise((resolve, reject) => {
     // Get Database
     const db = global.db;
 
     // Create New User
     const createUserQuery =
-      "INSERT INTO user (user_email, user_password, temperature_threshold, humidity_threshold, light_intensity_threshold) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO user (rfid_tag, user_email, user_password, temperature_threshold, humidity_threshold, light_intensity_threshold) VALUES (?, ?, ?, ?, ?, ?)";
     db.run(
       createUserQuery,
-      [email, hash_password, 25, 50, 400],
+      [rfid_tag, email, hash_password, 25, 50, 400],
       function (err) {
         if (err) {
           reject(err);
@@ -112,7 +136,7 @@ function selectUser(filters, columns = "*") {
  * @param {string} password
  * @returns User
  */
-User.register = async function (email, password) {
+User.register = async function (rfid_tag, email, password) {
   // Empty Fields Validation
   if (!email || !password) {
     throw Error("Please Fill In Missing Fields");
@@ -123,6 +147,7 @@ User.register = async function (email, password) {
 
   try {
     await checkEmailExists(email);
+    await checkTagExists(rfid_tag);
   } catch (err) {
     console.error(err);
     throw Error(err);
@@ -149,7 +174,7 @@ User.register = async function (email, password) {
   let lastId;
 
   try {
-    lastId = await createUser(email, password_hash);
+    lastId = await createUser(rfid_tag, email, password_hash);
   } catch (err) {
     console.error(err);
     throw Error(err);
@@ -203,6 +228,10 @@ User.login = async function (email, password) {
 
 User.exists = async function (user_id) {
   return await selectUser({ user_id: user_id });
+};
+
+User.tagExists = async function (rfid_tag) {
+  return await selectUser({ rfid_tag: rfid_tag });
 };
 
 // Exports

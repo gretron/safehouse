@@ -33,6 +33,7 @@ const monitor = function () {
       client.publish("safehouse/fan", "0", { retain: true });
 
       global.checkLightIntensity = true;
+      global.lightState = 0;
 
       client.on("message", (topic, message) => {
         switch (topic) {
@@ -41,8 +42,10 @@ const monitor = function () {
 
             if (message.includes("1")) {
               output.write(gpio.HIGH);
+              global.lightState = 1;
             } else if (message.includes("0")) {
               output.write(gpio.LOW);
+              global.lightState = 0;
             }
 
             break;
@@ -61,21 +64,27 @@ const monitor = function () {
 
             break;
           case "safehouse/light-intensity":
-            if (parseInt(message) < 400 && global.checkLightIntensity) {
+            if (parseInt(message) < 400 && global.lightState == 0) {
+
               const today = new Date();
 
-              sendMail("davidanotrudeau@gmail.com", 
+              if (global.checkLightIntensity) {
+                sendMail("davidanotrudeau@gmail.com", 
                   "Safehouse Alert: Light", 
                   `The Light is ON at ${today.getHours()}:${today.getMinutes()}`);
+              }
+
               client.publish("safehouse/notification", "Email has been sent.");
-              client.publish("safehouse/light", "1");
+              client.publish("safehouse/light", "1", { retain: true });
 
               global.checkLightIntensity = false;
 
               setTimeout(() => {
                 global.checkLightIntensity = true;
               }, 10000)
-            } 
+            } else if (parseInt(message) > 400 & global.lightState == 1) {
+              client.publish("safehouse/light", "0", { retain: true });
+            }
             
             break;
           default:
