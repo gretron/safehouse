@@ -37,13 +37,16 @@ function ThresholdSidebar() {
 
   return (
     <div className="thresholds">
-      <div className="temperature_threshold">
-        Temperature: <Temperature className="temperature" />
-        {thresholds.temperature_threshold}°C
+      <div className="thresholds__label">Thresholds</div>
+      <div className="threshold">
+        <div>Temperature</div> 
+        <Temperature className="temperature" />
+        <div className="threshold__value">{thresholds.temperature_threshold}°C</div>
       </div>
-      <div className="light_threshold">
-        Light: <Light className="light" />
-        {thresholds.light_threshold} Ω
+      <div className="threshold">
+        <div>Light</div> 
+        <Light className="light" />
+        <div className="threshold__value">{thresholds.light_threshold} Ω</div>
       </div>
     </div>
   );
