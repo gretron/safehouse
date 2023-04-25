@@ -7,6 +7,7 @@ import { ReactComponent as Light } from "../assets/img/light_icon.svg";
 
 // Hooks
 import { useState, useEffect } from "react";
+import { useMqtt } from "../contexts/MqttContext";
 
 const mockThresholds = {
   temperature_threshold: 25,
@@ -14,26 +15,26 @@ const mockThresholds = {
 };
 
 function ThresholdSidebar() {
+  const { client, connect, subscribe, unsubscribe } = useMqtt();
+
+
   const [thresholds, setThresholds] = useState({
     temperature_threshold: 0,
     light_threshold: 0,
   });
 
-  const onThresholdReceived = (string) => {
-      const { temperature_threshold, light_threshold } = JSON.parse(string);
-      setThresholds({ temperature_threshold, light_threshold });
+  const onThresholdsReceived = (string) => {
+      const { temperature_threshold, light_intensity_threshold } = JSON.parse(string);
+      setThresholds({ temperature_threshold, light_intensity_threshold });
   };
 
-  // useEffect(() => {
-  //   subscribe("safehouse/threshold", onThresholdReceived);
-  //   return () => {
-  //   unsubscribe("safehouse/threshold", onThresholdReceived);
-  //   };
-  // }, [client]);
-
   useEffect(() => {
-    onThresholdReceived(JSON.stringify(mockThresholds));
-  }, []);
+    subscribe("safehouse/thresholds", onThresholdsReceived);
+
+    return () => {
+      unsubscribe("safehouse/thresholds", onThresholdsReceived);
+    };
+  }, [client]);
 
   return (
     <div className="thresholds">
@@ -46,7 +47,7 @@ function ThresholdSidebar() {
       <div className="threshold">
         <div>Light</div> 
         <Light className="light" />
-        <div className="threshold__value">{thresholds.light_threshold} Ω</div>
+        <div className="threshold__value">{thresholds.light_intensity_threshold} Ω</div>
       </div>
     </div>
   );

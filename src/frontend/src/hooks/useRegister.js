@@ -6,14 +6,14 @@ export const useRegister = () => {
   const [loading, setLoading] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const register = async (email, password) => {
+  const register = async (rfid_tag, email, password) => {
     setLoading(true);
     setError(null);
 
     const response = await fetch("api/user/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ rfid_tag, email, password }),
     });
 
     const json = await response.json();

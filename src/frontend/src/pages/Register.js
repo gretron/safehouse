@@ -35,9 +35,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await register(email, password);
-
-    console.log(email, password, confirmPassword);
+    await register(tag, email, password);
   };
 
   return (

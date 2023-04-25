@@ -14,7 +14,9 @@ const Settings = () => {
   const [temperature, setTemperature] = useState(0);
   const [humidity, setHumidity] = useState(0);
   const [lightIntensity, setLightIntensity] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const { user } = useAuthContext();
   const { settings, dispatch } = useSettingsContext();
 
@@ -52,7 +54,10 @@ const Settings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     if (!user) {
+      setLoading(false);
       setError("Please Login to Update Settings");
       return;
     }
@@ -75,12 +80,14 @@ const Settings = () => {
     const json = await response.json();
 
     if (!response.ok) {
+      setLoading(false);
       setError(json.msg);
     } else {
+      setLoading(false);
       setError(null);
       dispatch({ type: "PUT", payload: json });
 
-      console.log("Successfuly Updated Settings");
+      setSuccess("Successfuly Updated Settings");
     }
   };
 
@@ -117,8 +124,9 @@ const Settings = () => {
       </div>
 
       {error && <div className="error">{error}</div>}
+      {success && <div className="success">{success}</div>}
 
-      <button className="button--purple">Update</button>
+      <button className="button--purple">{loading ? "Updating" : "Update"}</button>
     </form>
   );
 };

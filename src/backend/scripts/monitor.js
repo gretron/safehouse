@@ -4,6 +4,7 @@ const raspi = require("raspi");
 const gpio = require("raspi-gpio");
 const sensor = require("node-dht-sensor");
 const { inbox, sendMail } = require("./email");
+const User = require("../models/userModel");
 
 /**
  * Start MQTT Client Monitor
@@ -22,11 +23,14 @@ const monitor = function () {
 
     const client = mqtt.connect(options);
 
+    global.user = {temperature_threshold: 25, light_intensity_threshold: 400};
+
     client.on("connect", () => {
       console.log("Connected to MQTT Broker");
 
       client.subscribe("safehouse/light");
       client.subscribe("safehouse/fan");
+      client.subscribe("safehouse/rfid");
       client.subscribe("safehouse/light-intensity");
 
       client.publish("safehouse/light", "0", { retain: true });
@@ -35,7 +39,7 @@ const monitor = function () {
       global.checkLightIntensity = true;
       global.lightState = 0;
 
-      client.on("message", (topic, message) => {
+      client.on("message", async (topic, message) => {
         switch (topic) {
           case "safehouse/light":
             const output = new gpio.DigitalOutput(process.env.LIGHT_PIN);
@@ -86,6 +90,25 @@ const monitor = function () {
               client.publish("safehouse/light", "0", { retain: true });
             }
             
+            break;
+          case "safehouse/rfid":
+            const user = await User.tagExists(message.toString());
+
+            console.log(user);
+            console.log(message);
+
+            if (user) {
+              console.log(user);
+
+              global.user = user;
+
+              const thresholds = { temperature_threshold: user.temperature_threshold, light_intensity_threshold: user.light_intensity_threshold };
+
+              client.publish("safehouse/notification", user.user_email + " has checked in.");
+              client.publish("safehouse/thresholds", JSON.stringify(thresholds), { retain: true });
+              
+              console.log(user.user_email + " has checked in.");
+            }
             break;
           default:
             break;

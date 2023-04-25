@@ -36,3 +36,10 @@
   padding: 1rem;
   border-radius: 8px;
 }
+
+.success {
+  background: #7dff49;
+
+  padding: 1rem;
+  border-radius: 8px;
+}
