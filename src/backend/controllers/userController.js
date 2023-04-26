@@ -19,7 +19,7 @@ const registerUser = async (req, res) => {
   const { rfid_tag, email, password } = req.body;
 
   try {
-    const user = await User.register(rfid_tag, email, password);
+    const user = await User.register(rfid_tag.trim(), email, password);
     console.log(user);
 
     const token = createToken(user.user_id);

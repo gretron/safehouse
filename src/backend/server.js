@@ -15,7 +15,7 @@ const lightRoutes = require("./routes/lightRoutes");
 const settingsRoutes = require("./routes/settingsRoutes");
 
 // Monitor
-const monitor = require("./scripts/monitor");
+const { monitor } = require("./scripts/monitor");
 
 // #endregion
 

@@ -23,7 +23,8 @@ const monitor = function () {
 
     const client = mqtt.connect(options);
 
-    global.user = {temperature_threshold: 25, light_intensity_threshold: 400};
+    global.mqttClient = client;
+    global.user = {user_id: 0, temperature_threshold: 25, light_intensity_threshold: 400};
 
     client.on("connect", () => {
       console.log("Connected to MQTT Broker");
@@ -68,7 +69,7 @@ const monitor = function () {
 
             break;
           case "safehouse/light-intensity":
-            if (parseInt(message) < 400 && global.lightState == 0) {
+            if (parseInt(message) < global.user.light_intensity_threshold && global.lightState == 0) {
 
               const today = new Date();
 
@@ -97,18 +98,10 @@ const monitor = function () {
             console.log(user);
             console.log(message);
 
-            if (user) {
-              console.log(user);
-
-              global.user = user;
-
-              const thresholds = { temperature_threshold: user.temperature_threshold, light_intensity_threshold: user.light_intensity_threshold };
-
-              client.publish("safehouse/notification", user.user_email + " has checked in.");
-              client.publish("safehouse/thresholds", JSON.stringify(thresholds), { retain: true });
-              
-              console.log(user.user_email + " has checked in.");
+            if (user && global.user.user_id != user.user_id) {
+              changeThresholds(user);
             }
+
             break;
           default:
             break;
@@ -125,7 +118,7 @@ const monitor = function () {
           client.publish("safehouse/temperature", temperature.toString());
           client.publish("safehouse/humidity", humidity.toString());
 
-          if (temperature > 25 && canSendMail) {
+          if (temperature > global.user.temperature_threshold && canSendMail) {
             console.log("canSendMail: " + canSendMail.toString());
             canSendMail = false;
 
@@ -139,7 +132,7 @@ const monitor = function () {
           }
         }
       });
-    }, 3000);
+    }, 5000);
 
     inbox((text) => {
       if (text.toLowerCase().includes("yes")) {
@@ -149,5 +142,18 @@ const monitor = function () {
   });
 };
 
+function changeThresholds(user) {
+    console.log(user);
+
+    global.user = user;
+
+    const thresholds = { temperature_threshold: user.temperature_threshold, light_intensity_threshold: user.light_intensity_threshold };
+
+    global.mqttClient.publish("safehouse/notification", user.user_email + " has checked in.");
+    global.mqttClient.publish("safehouse/thresholds", JSON.stringify(thresholds), { retain: true });
+    
+    console.log(user.user_email + " has checked in.");
+}
+
 // Exports
-module.exports = monitor;
+module.exports = { monitor, changeThresholds };

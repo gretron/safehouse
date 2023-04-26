@@ -108,11 +108,7 @@ Settings.update = async (user_id, temperature, humidity, light_intensity) => {
 
   user = await User.exists(user_id);
 
-  return {
-    temperature: user.temperature_threshold,
-    humidity: user.humidity_threshold,
-    light_intensity: user.light_intensity_threshold,
-  };
+  return user;
 };
 
 // Exports

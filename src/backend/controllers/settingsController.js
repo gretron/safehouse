@@ -1,3 +1,6 @@
+// Monitor
+const { changeThresholds } = require("../scripts/monitor");
+
 const Settings = require("../models/settingsModel");
 
 /**
@@ -10,12 +13,22 @@ const handlePutSettings = async (req, res) => {
   const user_id = req.user.user_id;
 
   try {
-    const settings = await Settings.update(
+    const user = await Settings.update(
       user_id,
       temperature,
       humidity,
       light_intensity
     );
+
+    if (global.user.user_id == user.user_id) {
+      changeThresholds(user);
+    }
+
+    const settings = {
+      temperature: user.temperature_threshold,
+      humidity: user.humidity_threshold,
+      light_intensity: user.light_intensity_threshold,
+    };
 
     res.status(200).json(settings);
   } catch (err) {
