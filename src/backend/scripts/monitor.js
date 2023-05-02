@@ -26,6 +26,9 @@ const monitor = function () {
     global.mqttClient = client;
     global.user = {user_id: 0, temperature_threshold: 25, light_intensity_threshold: 400};
 
+    const initialThresholds = { temperature_threshold: global.user.temperature_threshold, light_intensity_threshold: global.user.light_intensity_threshold };
+    client.publish("safehouse/thresholds", JSON.stringify(initialThresholds), { retain: true });
+
     client.on("connect", () => {
       console.log("Connected to MQTT Broker");
 
@@ -93,7 +96,7 @@ const monitor = function () {
             
             break;
           case "safehouse/rfid":
-            const user = await User.tagExists(message.toString());
+            const user = await User.tagExists(message.toString().trim());
 
             console.log(user);
             console.log(message);
