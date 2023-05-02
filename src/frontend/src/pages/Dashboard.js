@@ -16,7 +16,6 @@ import LightIntensityWidget from "../components/LightIntensityWidget";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HumidityWidget from "../components/HumidityWidget";
-import ThresholdSidebar from "../components/ThresholdSidebar";
 
 /**
  * Dashboard Page
@@ -29,7 +28,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (!client) connect();
-    console.log("Connecting")
+    console.log("Connecting");
   }, [client]);
 
   return (
@@ -45,8 +44,6 @@ function Dashboard() {
       </div>
       <Notification />
       <Sidebar />
-      <ThresholdSidebar />
-
     </>
   );
 }
