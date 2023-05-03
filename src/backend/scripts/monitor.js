@@ -24,7 +24,11 @@ const monitor = function () {
     const client = mqtt.connect(options);
 
     global.mqttClient = client;
-    global.user = {user_id: 0, temperature_threshold: 25, light_intensity_threshold: 400};
+    global.user = {
+      user_id: 0,
+      temperature_threshold: 25,
+      light_intensity_threshold: 400,
+    };
 
     client.on("connect", () => {
       console.log("Connected to MQTT Broker");
@@ -69,14 +73,18 @@ const monitor = function () {
 
             break;
           case "safehouse/light-intensity":
-            if (parseInt(message) < global.user.light_intensity_threshold && global.lightState == 0) {
-
+            if (
+              parseInt(message) < global.user.light_intensity_threshold &&
+              global.lightState == 0
+            ) {
               const today = new Date();
 
               if (global.checkLightIntensity) {
-                sendMail("davidanotrudeau@gmail.com", 
-                  "Safehouse Alert: Light", 
-                  `The Light is ON at ${today.getHours()}:${today.getMinutes()}`);
+                sendMail(
+                  "davidanotrudeau@gmail.com",
+                  "Safehouse Alert: Light",
+                  `The Light is ON at ${today.getHours()}:${today.getMinutes()}`
+                );
               }
 
               client.publish("safehouse/notification", "Email has been sent.");
@@ -86,11 +94,11 @@ const monitor = function () {
 
               setTimeout(() => {
                 global.checkLightIntensity = true;
-              }, 10000)
-            } else if (parseInt(message) > 400 & global.lightState == 1) {
+              }, 10000);
+            } else if ((parseInt(message) > 400) & (global.lightState == 1)) {
               client.publish("safehouse/light", "0", { retain: true });
             }
-            
+
             break;
           case "safehouse/rfid":
             const user = await User.tagExists(message.toString());
@@ -112,7 +120,7 @@ const monitor = function () {
     let canSendMail = true;
 
     setInterval(() => {
-      sensor.read(11, 26, function(err, temperature, humidity) {
+      sensor.read(11, 26, function (err, temperature, humidity) {
         if (!err) {
           console.log(`temp: ${temperature}°C, humidity: ${humidity}%`);
           client.publish("safehouse/temperature", temperature.toString());
@@ -122,13 +130,17 @@ const monitor = function () {
             console.log("canSendMail: " + canSendMail.toString());
             canSendMail = false;
 
-            sendMail("davidanotrudeau@gmail.com", "Safehouse Alert: Temperature", `The current temperature is ${temperature}°C. Would you like to turn on the fan?`);
+            sendMail(
+              "davidanotrudeau@gmail.com",
+              "Safehouse Alert: Temperature",
+              `The current temperature is ${temperature}°C. Would you like to turn on the fan?`
+            );
 
             setTimeout(() => {
               canSendMail = true;
             }, 30000);
           } else {
-        console.log("canSendMail: " + canSendMail.toString());
+            console.log("canSendMail: " + canSendMail.toString());
           }
         }
       });
@@ -143,16 +155,27 @@ const monitor = function () {
 };
 
 function changeThresholds(user) {
-    console.log(user);
+  console.log(user);
 
-    global.user = user;
+  global.user = user;
 
-    const thresholds = { temperature_threshold: user.temperature_threshold, light_intensity_threshold: user.light_intensity_threshold };
+  const thresholds = {
+    user_email: user.user_email,
+    temperature_threshold: user.temperature_threshold,
+    light_intensity_threshold: user.light_intensity_threshold,
+  };
 
-    global.mqttClient.publish("safehouse/notification", user.user_email + " has checked in.");
-    global.mqttClient.publish("safehouse/thresholds", JSON.stringify(thresholds), { retain: true });
-    
-    console.log(user.user_email + " has checked in.");
+  global.mqttClient.publish(
+    "safehouse/notification",
+    user.user_email + " has checked in."
+  );
+  global.mqttClient.publish(
+    "safehouse/thresholds",
+    JSON.stringify(thresholds),
+    { retain: true }
+  );
+
+  console.log(user.user_email + " has checked in.");
 }
 
 // Exports
