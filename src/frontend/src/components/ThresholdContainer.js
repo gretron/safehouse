@@ -11,7 +11,7 @@ const mockThresholds = {
   light_threshold: 400,
 };
 
-function Threshold({ label, value, min, max, unit }) {
+function Threshold({ background, label, value, min, max, unit }) {
   const [percentage, setPercentage] = useState(0);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ function Threshold({ label, value, min, max, unit }) {
       <div className="threshold__container">
         <div
           className="threshold__fill"
-          style={{ width: `${percentage}%` }}
+          style={{ width: `${percentage}%`, background: background }}
         ></div>
       </div>
       <div className="threshold__ranges">
@@ -57,6 +57,7 @@ function ThresholdContainer({ temperature, light }) {
         min="0"
         max="100"
         unit="°C"
+        background="#f44336"
       />
       <Threshold
         label="Light Intensity"
@@ -64,6 +65,7 @@ function ThresholdContainer({ temperature, light }) {
         min="0"
         max="1024"
         unit="Ω"
+        background="rgb(255, 222, 77)"
       />
     </div>
   );

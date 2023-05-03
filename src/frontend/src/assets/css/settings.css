@@ -38,7 +38,7 @@
 }
 
 .success {
-  background: #7dff49;
+  background: var(--accent);
 
   padding: 1rem;
   border-radius: 8px;

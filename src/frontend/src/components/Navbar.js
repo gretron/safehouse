@@ -27,6 +27,11 @@ import ThresholdContainer from "./ThresholdContainer";
 const Navbar = () => {
   const { client, connect, subscribe, unsubscribe } = useMqtt();
 
+  useEffect(() => {
+    if (!client) connect();
+    console.log("Connecting");
+  }, [client]);
+
   const [thresholds, setThresholds] = useState({
     user_name: "User",
     user_email: "user@example.com",
@@ -38,7 +43,10 @@ const Navbar = () => {
     const { user_email, temperature_threshold, light_intensity_threshold } =
       JSON.parse(string);
 
-    const user_name = user_email.split("@")[0];
+    var user_name = "";
+
+    if (user_email)
+      user_name = user_email.split("@")[0];
 
     setThresholds({
       user_name,
@@ -93,7 +101,7 @@ const Navbar = () => {
           </div>
           <ThresholdContainer
             temperature={thresholds.temperature_threshold}
-            light={thresholds.light_threshold}
+            light={thresholds.light_intensity_threshold}
           />
           <div className="navbar__footer">
             <a className="navbar__link" onClick={handleClick}>

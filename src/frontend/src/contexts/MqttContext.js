@@ -67,6 +67,8 @@ export const MqttProvider = ({ children }) => {
    * @param {boolean} retain Retain Message in Topic
    */
   function publish(topic, message, qos = 0, retain = false) {
+    if (!mqttClient) return;
+
     mqttClient.publish(topic, message, qos, retain);
   }
 
