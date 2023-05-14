@@ -86,7 +86,7 @@ const monitor = function () {
                 sendMail(
                   "davidanotrudeau@gmail.com",
                   "Safehouse Alert: Light",
-                  `The Light is ON at ${today.getHours()}:${today.getMinutes()}`
+                  `The Light is ON at ${("0" + today.getHours()).slice(-2)}:${("0" + today.getMinutes()).slice(-2)}`
                 );
               }
 
@@ -161,6 +161,14 @@ function changeThresholds(user) {
   console.log(user);
 
   global.user = user;
+
+  const today = new Date();
+
+  sendMail(
+    "davidanotrudeau@gmail.com",
+    "Safehouse Alert: User",
+    `User ${user.user_email} entered at ${("0" + today.getHours()).slice(-2)}:${("0" + today.getMinutes()).slice(-2)}`
+  );
 
   const thresholds = {
     user_email: user.user_email,
